@@ -11,4 +11,4 @@ jobs:
         run: kubectl create secret tls petstore-secret --key "C:\Users\dspAdmin\Desktop\wildcard-cert for syseng\wildcard-syseng.struxurewarecloud.com.key" --cert "C:\Users\dspAdmin\Desktop\wildcard-cert for syseng\wildcard-syseng.struxurewarecloud.com.crt" --namespace gloo-system
 
       - name: Set VirtualService to reference new secret
-        run: glooctl edit vs --name default-petstore-8080 --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
+        run: glooctl edit vs --name solo-petstore --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
