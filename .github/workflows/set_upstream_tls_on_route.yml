@@ -9,8 +9,6 @@ env:
 jobs:   
   initialize:
     runs-on: [self-hosted]
-    strategy:
-      max-parallel: 1
     steps:
       - name: Create a temporary directory and path into it
         run: mkdir temp
@@ -57,8 +55,8 @@ jobs:
       
   cleanup:
     runs-on: [self-hosted]
-    strategy:
-      max-parallel: 1
+    continue-on-error: true
+    needs: [deploy]
     steps:
       - name: Clean up certificate from runner
         run: rmdir temp -force -recurse
