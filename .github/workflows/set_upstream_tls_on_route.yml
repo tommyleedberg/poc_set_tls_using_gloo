@@ -55,8 +55,8 @@ jobs:
       
   cleanup:
     runs-on: [self-hosted]
-    needs: [initialize, deploy]
-    if: "always()&&(needs.initialize.outputs.job_status=='success')"
+    needs: [deploy]
+    if: "always()"
     strategy:
       max-parallel: 1
     steps:
