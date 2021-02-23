@@ -16,9 +16,10 @@ jobs:
   deploy:
     needs: [initialize]
     runs-on: [self-hosted]
-    env:
-      working-directory: ./temp
-
+    defaults:
+      run:
+        working-directory:  ./temp
+        
     steps:
       - name: Azure Login
         run: az login --identity
