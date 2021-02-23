@@ -18,7 +18,7 @@ jobs:
       run: az account set --subscription "US018129-Cumulus dev"
 
     - name: Get Certificate 
-      run: az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-tsl -subscription 77a099cd-d6f8-4902-a4d6-8abe920f6462 --name dev-struxurewarecloud-com --encoding utf-8
+      run:  az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-qa1 --subscription 77a099cd-d6f8-4902-a4d6-8abe920f6462 --name struxurewarecloud-vsts-dbos --encoding base64
 
     - name: Set Azure Subscription 
       run: az account set --subscription "US0110167-DBOS-Dev-Int"
