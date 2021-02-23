@@ -20,7 +20,7 @@ jobs:
         working-directory:  ./temp
     strategy:
       max-parallel: 1
-      
+    
     steps:
       - name: Azure Login
         run: az login --identity
@@ -55,7 +55,8 @@ jobs:
       
   cleanup:
     runs-on: [self-hosted]
-    needs: [initialize]
+    needs: [initialize, deploy]
+    if: "always()&&(needs.initialize.outputs.job_status=='success')"
     strategy:
       max-parallel: 1
     steps:
