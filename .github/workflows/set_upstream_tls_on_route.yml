@@ -9,7 +9,9 @@ env:
 jobs:
   deploy:
     runs-on: [self-hosted]
-    
+    env:
+      working-directory: ./temp
+      
     steps:
     - name: Create a temporary directory and path into it
       run: mkdir temp; cd temp
