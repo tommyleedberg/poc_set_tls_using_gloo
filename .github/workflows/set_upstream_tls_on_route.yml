@@ -17,15 +17,24 @@ jobs:
     - name: Set Azure Subscription
       run: az account set --subscription "US018129-Cumulus dev"
 
-    - name: Get Certificate
-      id: getSecrets      
-      run: az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-tsl
+    - name: Get Certificate 
+      run: az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-tsl -subscription 77a099cd-d6f8-4902-a4d6-8abe920f6462 --name dev-struxurewarecloud-com --encoding utf-8
 
+    - name: Set Azure Subscription 
+      run: az account set --subscription "US0110167-DBOS-Dev-Int"
+      
+    - name: Get secrets
+      uses: Azure/get-keyvault-secrets@v1.0
+      id: certificatePass
+      with:
+        keyvault: "dbos-kv-tsl"
+        secrets: "CertificatePass"
+          
     - name: Unpack the pfx into a .crt file
-      run: openssl pkcs12 -in dataprocessing.pfx -clcerts -nokeys -out dataprocessing.crt
+      run: openssl pkcs12 -in dataprocessing.pfx -clcerts -nokeys -out dataprocessing.crt -passin "pass:"
       
     - name: Unpack the pfx into a .key file
-      run: openssl pkcs12 -in dataprocessing.pfx -clcerts -out dataprocessing.key
+      run: openssl pkcs12 -in dataprocessing.pfx -nocerts -out dataprocessing.key -passin "pass:" -passout "pass:steps.getSecrets.CertificatePass"
       
     - name: Add certificate to K8s cert store
       run: kubectl create secret tls petstore-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace gloo-system
