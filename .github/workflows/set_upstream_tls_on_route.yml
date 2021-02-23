@@ -12,7 +12,7 @@ jobs:
   
     steps:
       - name: Create a temporary directory and path into it
-        run: mkdir temp; cd temp
+        run: mkdir temp
   deploy:
     runs-on: [self-hosted]
     env:
