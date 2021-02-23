@@ -55,8 +55,9 @@ jobs:
       
   cleanup:
     runs-on: [self-hosted]
-    continue-on-error: true
-    needs: [deploy]
+    needs: [initialize]
+    strategy:
+      max-parallel: 1
     steps:
       - name: Clean up certificate from runner
         run: rmdir temp -force -recurse
