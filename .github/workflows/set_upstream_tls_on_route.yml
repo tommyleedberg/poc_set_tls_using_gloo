@@ -3,6 +3,9 @@ name: Set Upstream TLS on a specified route
 on:
   workflow_dispatch:
 
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  
 jobs:
   deploy:
     runs-on: [self-hosted]
