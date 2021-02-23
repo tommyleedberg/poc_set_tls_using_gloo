@@ -5,51 +5,54 @@ on:
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  
+ 
 jobs:
+  initialize:
+    runs-on: [self-hosted]
+  
+    steps:
+      - name: Create a temporary directory and path into it
+        run: mkdir temp; cd temp
   deploy:
     runs-on: [self-hosted]
     env:
       working-directory: ./temp
-      
+
     steps:
-    - name: Create a temporary directory and path into it
-      run: mkdir temp; cd temp
-      
-    - name: Azure Login
-      run: az login --identity
+      - name: Azure Login
+        run: az login --identity
 
-    - name: Set Azure Subscription
-      run: az account set --subscription "US018129-Cumulus dev"
+      - name: Set Azure Subscription
+        run: az account set --subscription "US018129-Cumulus dev"
 
-    - name: Get Certificate 
-      run:  az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-tsl --subscription 77a099cd-d6f8-4902-a4d6-8abe920f6462 --name struxurewarecloud-vsts-dbos --encoding base64
+      - name: Get Certificate 
+        run:  az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-tsl --subscription 77a099cd-d6f8-4902-a4d6-8abe920f6462 --name struxurewarecloud-vsts-dbos --encoding base64
 
-    - name: Set Azure Subscription 
-      run: az account set --subscription "US0110167-DBOS-Dev-Int"
-      
-    - name: Get secrets
-      uses: Azure/get-keyvault-secrets@v1.0
-      id: certificatePass
-      with:
-        keyvault: "dbos-kv-tsl"
-        secrets: "CertificatePass"
-          
-    - name: Unpack the pfx into a .crt file
-      run: openssl pkcs12 -in dataprocessing.pfx -clcerts -nokeys -out dataprocessing.crt -passin "pass:"
-      
-    - name: Unpack the pfx into a .key file
-      run: openssl pkcs12 -in dataprocessing.pfx -nocerts -out dataprocessing.key -passin "pass:" -passout "pass:steps.getSecrets.CertificatePass"
-      
-    - name: Add certificate to K8s cert store
-      run: kubectl create secret tls petstore-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace gloo-system
+      - name: Set Azure Subscription 
+        run: az account set --subscription "US0110167-DBOS-Dev-Int"
+        
+      - name: Get secrets
+        uses: Azure/get-keyvault-secrets@v1.0
+        id: certificatePass
+        with:
+          keyvault: "dbos-kv-tsl"
+          secrets: "CertificatePass"
+            
+      - name: Unpack the pfx into a .crt file
+        run: openssl pkcs12 -in dataprocessing.pfx -clcerts -nokeys -out dataprocessing.crt -passin "pass:"
+        
+      - name: Unpack the pfx into a .key file
+        run: openssl pkcs12 -in dataprocessing.pfx -nocerts -out dataprocessing.key -passin "pass:" -passout "pass:steps.getSecrets.CertificatePass"
+        
+      - name: Add certificate to K8s cert store
+        run: kubectl create secret tls petstore-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace gloo-system
 
-    - name: Set VirtualService to reference new secret
-      run: glooctl edit vs --name solo-petstore --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
+      - name: Set VirtualService to reference new secret
+        run: glooctl edit vs --name solo-petstore --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
       
   cleanup:
     runs-on: [self-hosted]
-    
+      
     steps:
       - name: Clean up certificate from runner
         run: rmdir temp -force -recurse
