@@ -9,8 +9,8 @@ env:
 jobs:
   deploy:
     runs-on: [self-hosted]
-    steps:
     
+    steps:
     - name: Create a temporary directory and path into it
       run: mkdir temp; cd temp
       
@@ -45,5 +45,9 @@ jobs:
     - name: Set VirtualService to reference new secret
       run: glooctl edit vs --name solo-petstore --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
       
-    - name: Clean up certificate from runner
-      run: cd..; rmdir temp -force -recurse
+  cleanup:
+    runs-on: [self-hosted]
+    
+    steps:
+      - name: Clean up certificate from runner
+        run: rmdir temp -force -recurse
