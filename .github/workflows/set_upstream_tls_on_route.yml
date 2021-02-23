@@ -6,10 +6,11 @@ on:
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
  
-jobs:
+jobs:   
   initialize:
     runs-on: [self-hosted]
-  
+    strategy:
+      max-parallel: 1
     steps:
       - name: Create a temporary directory and path into it
         run: mkdir temp
@@ -19,7 +20,9 @@ jobs:
     defaults:
       run:
         working-directory:  ./temp
-        
+    strategy:
+      max-parallel: 1
+      
     steps:
       - name: Azure Login
         run: az login --identity
@@ -54,7 +57,8 @@ jobs:
       
   cleanup:
     runs-on: [self-hosted]
-    needs: [initialize, deploy]  
+    strategy:
+      max-parallel: 1
     steps:
       - name: Clean up certificate from runner
         run: rmdir temp -force -recurse
