@@ -7,8 +7,31 @@ jobs:
   deploy:
     runs-on: [self-hosted]
     steps:
-      - name: Add certificate to K8s cert store
-        run: kubectl create secret tls petstore-secret --key "C:\Users\dspAdmin\Desktop\wildcard-cert for syseng\wildcard-syseng.struxurewarecloud.com.key" --cert "C:\Users\dspAdmin\Desktop\wildcard-cert for syseng\wildcard-syseng.struxurewarecloud.com.crt" --namespace gloo-system
+    
+    - name: Create a temporary directory and path into it
+      run: mkdir temp; cd temp
+      
+    - name: Azure Login
+      run: az login --identity
 
-      - name: Set VirtualService to reference new secret
-        run: glooctl edit vs --name solo-petstore --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
+    - name: Set Azure Subscription
+      run: az account set --subscription "US018129-Cumulus dev"
+
+    - name: Get Certificate
+      id: getSecrets      
+      run: az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-tsl
+
+    - name: Unpack the pfx into a .crt file
+      run: openssl pkcs12 -in dataprocessing.pfx -clcerts -nokeys -out dataprocessing.crt
+      
+    - name: Unpack the pfx into a .key file
+      run: openssl pkcs12 -in dataprocessing.pfx -clcerts -out dataprocessing.key
+      
+    - name: Add certificate to K8s cert store
+      run: kubectl create secret tls petstore-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace gloo-system
+
+    - name: Set VirtualService to reference new secret
+      run: glooctl edit vs --name solo-petstore --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
+      
+    - name: Clean up certificate from runner
+      run: cd..; rmdir temp -force -recurse
