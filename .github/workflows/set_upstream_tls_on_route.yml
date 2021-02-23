@@ -14,6 +14,7 @@ jobs:
       - name: Create a temporary directory and path into it
         run: mkdir temp
   deploy:
+    needs: [initialize]
     runs-on: [self-hosted]
     env:
       working-directory: ./temp
@@ -52,7 +53,7 @@ jobs:
       
   cleanup:
     runs-on: [self-hosted]
-      
+    needs: [initialize, deploy]  
     steps:
       - name: Clean up certificate from runner
         run: rmdir temp -force -recurse
