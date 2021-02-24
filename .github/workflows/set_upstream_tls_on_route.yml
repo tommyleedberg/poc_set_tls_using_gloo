@@ -22,6 +22,7 @@ jobs:
       - name: Get previous secret name
         id: previousSecret
         run: echo "::set-output name=secretExists::$(kubectl get secret petstore-secret -n gloo-system)"
+        continue-on-error: true
         
       - name: Remove secret if it exists
         if: contains(steps.previousSecret.outputs, 'NotFound') == false
