@@ -27,7 +27,7 @@ jobs:
         run: echo "steps.previousSecret.outputs"
         
   deploy:
-    needs: [remove-old-secret]
+    needs: [removeOldSecret]
     runs-on: [self-hosted]
     defaults:
       run:
