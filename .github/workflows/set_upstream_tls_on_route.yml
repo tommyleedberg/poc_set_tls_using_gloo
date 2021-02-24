@@ -25,7 +25,7 @@ jobs:
         continue-on-error: true
         
       - name: Remove secret if it exists
-        if: contains(steps.previousSecret.outputs, 'NotFound') == false
+        if: steps.previousSecret.outcome != 'success'
         run: kubectl.exe delete secret petstore-secret -n gloo-system
         
   deploy:
