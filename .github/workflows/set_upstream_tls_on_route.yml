@@ -13,21 +13,9 @@ jobs:
     steps:
       - name: Create a temporary directory and path into it
         run: mkdir temp
-  
-  removeOldSecret:
-    runs-on: [self-hosted]
-    
-    steps:
-      - name: Get previous secret name
-        id: previousSecret
-        run: ::set-output name=secretExists::"kubectle get secret petstore-secret -n gloo-system"
-        
-      - name: Remove secret if it exists
-        if: steps.previousSecret.outputs != 0
-        run: echo "steps.previousSecret.outputs"
-        
+          
   deploy:
-    needs: [removeOldSecret]
+    needs: [initialize]
     runs-on: [self-hosted]
     defaults:
       run:
