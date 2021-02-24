@@ -21,11 +21,11 @@ jobs:
     steps:
       - name: Get previous secret name
         id: previousSecret
-        run: echo "::set-output name=secretExists::$(kubectl get secret petstore-secret -n gloo-system)"
+        run: kubectl get secret petstore-secret -n gloo-system
         continue-on-error: true
         
       - name: Remove secret if it exists
-        if: steps.previousSecret.outcome != 'success'
+        if: steps.previousSecret.outcome == 'success'
         run: kubectl.exe delete secret petstore-secret -n gloo-system
         
   deploy:
