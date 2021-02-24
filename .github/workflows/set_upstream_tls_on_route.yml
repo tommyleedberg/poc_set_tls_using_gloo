@@ -44,8 +44,11 @@ jobs:
       - name: Unpack the pfx into a .crt file
         run: openssl pkcs12 -in dataprocessing.pfx -clcerts -nokeys -out dataprocessing.crt -passin "pass:"
         
-      - name: Unpack the pfx into a .key file
-        run: openssl pkcs12 -in dataprocessing.pfx -nocerts -out dataprocessing.key -passin "pass:" -passout "pass:steps.getSecrets.CertificatePass"
+      - name: Unpack the pfx into an encrypted .key file
+        run: openssl pkcs12 -in dataprocessing.pfx -nocerts -out dataprocessing-encrypted.key -passin "pass:" -passout "pass:steps.getSecrets.CertificatePass"
+        
+      - name: Create an unencrypted keyfile for k8s
+        run: openssl rsa -in dataprocessing-encrypted.key -out dataprocessing.key -passin "pass:steps.getSecrets.CertificatePass"
         
       - name: Add certificate to K8s cert store
         run: kubectl create secret tls petstore-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace gloo-system
