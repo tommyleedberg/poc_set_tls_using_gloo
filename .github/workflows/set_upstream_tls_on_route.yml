@@ -12,14 +12,25 @@ jobs:
     steps:
       - name: Create a temporary directory and path into it
         run: mkdir temp
-  deploy:
+        
+  check-and-cleanup-previous-secrets:
     needs: [initialize]
+    runs-on: [self-hosted]
+    
+    steps:
+      - name: Get previous secret name
+        id: previousSecret
+        run: ::set-output name=secretExists::"kubectle get secret petstore-secret -n gloo-system"
+      - name: Remove secret if it exists
+        if: steps.previousSecret.outputs != 0
+        run: echo "steps.previousSecret.outputs"
+        
+  deploy:
+    needs: [check-and-cleanup-previous-secrets]
     runs-on: [self-hosted]
     defaults:
       run:
         working-directory:  ./temp
-    strategy:
-      max-parallel: 1
     
     steps:
       - name: Azure Login
@@ -60,8 +71,7 @@ jobs:
     runs-on: [self-hosted]
     needs: [deploy]
     if: "always()"
-    strategy:
-      max-parallel: 1
+
     steps:
       - name: Clean up certificate from runner
         run: rmdir temp -force -recurse
