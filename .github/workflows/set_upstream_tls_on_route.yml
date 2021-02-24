@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Get previous secret name
         id: previousSecret
-        run: ::set-output name=secretExists::"kubectle get secret petstore-secret -n gloo-system"
+        run: echo "::set-output name=secretExists::kubectle get secret petstore-secret -n gloo-system"
         
   deploy:
     needs: [removeOldSecret]
