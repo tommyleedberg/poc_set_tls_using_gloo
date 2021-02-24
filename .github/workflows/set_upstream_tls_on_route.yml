@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Get previous secret name
         id: previousSecret
-        run: echo '::set-output name=secretExists::"kubectle get secret petstore-secret -n gloo-system"'
+        run: echo "::set-output name=secretExists::$(kubectle get secret petstore-secret -n gloo-system)"
         
       - name: Remove secret if it exists
         if: steps.previousSecret.outputs != 0
