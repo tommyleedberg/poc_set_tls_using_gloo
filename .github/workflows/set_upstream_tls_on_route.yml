@@ -24,7 +24,7 @@ jobs:
         run: echo "::set-output name=secretExists::$(kubectl get secret petstore-secret -n gloo-system)"
         
       - name: Remove secret if it exists
-        if: contains(steps.previousSecret.outputs, "NotFound") == false
+        if: contains(steps.previousSecret.outputs, 'NotFound') == false
         run: kubectl.exe delete secret petstore-secret -n gloo-system
         
   deploy:
