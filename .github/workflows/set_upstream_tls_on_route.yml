@@ -35,12 +35,12 @@ jobs:
         # try to get the previous secret, kubectl returns an error if it doesnt exist so if the request is successful delete the previous secret
       - name: Get previous secret name
         id: previousSecret
-        run: kubectl get secret petstore-secret -n gloo-system
+        run: kubectl get secret ${{ github.event.inputs.virtualServiceName }}-secret -n ${{ github.event.inputs.virtualServiceNamespace }}
         continue-on-error: true
         
       - name: Remove secret if it exists
         if: steps.previousSecret.outcome == 'success'
-        run: kubectl.exe delete secret petstore-secret -n gloo-system
+        run: kubectl.exe delete secret ${{ github.event.inputs.virtualServiceName }}-secret -n ${{ github.event.inputs.virtualServiceNamespace }}
         
   deploy:
     needs: [removeOldSecret]
