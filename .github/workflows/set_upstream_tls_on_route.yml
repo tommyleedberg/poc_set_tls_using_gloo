@@ -2,7 +2,20 @@ name: Set Upstream TLS on a specified route
 
 on:
   workflow_dispatch:
-
+    inputs:
+      keyVaultName:
+        description: The name of the Azure Key Vault where the certificate and certificate password are stored
+        required: true
+      certificateName:
+        description: The name of the certificate in Azure Key Vault
+        required: true
+      virtualServiceName:
+        description: The name of the virtual service
+        required: true
+      virtualServiceNamespace:
+        description: The name of the virtual service namespace
+        required: true
+  
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
  
@@ -19,6 +32,7 @@ jobs:
     runs-on: [self-hosted]
     
     steps:
+        # try to get the previous secret, kubectl returns an error if it doesnt exist so if the request is successful delete the previous secret
       - name: Get previous secret name
         id: previousSecret
         run: kubectl get secret petstore-secret -n gloo-system
@@ -43,16 +57,13 @@ jobs:
         run: az account set --subscription "US018129-Cumulus dev"
 
       - name: Get Certificate 
-        run:  az keyvault secret download --file dataprocessing.pfx --vault-name dbos-kv-tsl --subscription 77a099cd-d6f8-4902-a4d6-8abe920f6462 --name struxurewarecloud-vsts-dbos --encoding base64
-
-      - name: Set Azure Subscription 
-        run: az account set --subscription "US0110167-DBOS-Dev-Int"
+        run:  az keyvault secret download --file dataprocessing.pfx --vault-name ${{ github.event.inputs.keyVaultName }} --name ${{ github.event.inputs.certificateName }} --encoding base64
         
       - name: Get secrets
         uses: Azure/get-keyvault-secrets@v1.0
         id: certificatePass
         with:
-          keyvault: "dbos-kv-tsl"
+          keyvault: ${{ github.event.inputs.keyVaultName }}
           secrets: "CertificatePass"
             
       - name: Unpack the pfx into a .crt file
@@ -65,10 +76,10 @@ jobs:
         run: openssl rsa -in dataprocessing-encrypted.key -out dataprocessing.key -passin "pass:steps.getSecrets.CertificatePass"
         
       - name: Add certificate to K8s cert store
-        run: kubectl create secret tls petstore-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace gloo-system
+        run: kubectl create secret tls ${{ github.event.inputs.virtualServiceName }}-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace ${{ github.event.inputs.virtualServiceNamespace }}
 
       - name: Set VirtualService to reference new secret
-        run: glooctl edit vs --name solo-petstore --namespace gloo-system --ssl-secret-name petstore-secret --ssl-secret-namespace gloo-system
+        run: glooctl edit vs --name ${{ github.event.inputs.virtualServiceName }} --namespace ${{ github.event.inputs.virtualServiceNamespace }} --ssl-secret-name ${{ github.event.inputs.virtualServiceName }}-secre --ssl-secret-namespace ${{ github.event.inputs.virtualServiceNamespace }}
       
   cleanup:
     runs-on: [self-hosted]
