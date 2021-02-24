@@ -19,7 +19,8 @@ jobs:
     
     steps:
       - name: Get previous secret name
-        run: echo "Hello World"
+        id: previousSecret
+        run: ::set-output name=secretExists::"kubectle get secret petstore-secret -n gloo-system"
         
   deploy:
     needs: [removeOldSecret]
