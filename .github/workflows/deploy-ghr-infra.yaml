@@ -17,16 +17,16 @@ jobs:
         with:
           files: templates/shared/dmz-gh-runner/vm-creation.parameters.json
         env:
-          prefix: etp
-          env: tsl
-          adminUsername: etpAdmin
-          adminPassword: etpGHRunnerVM!!
-          dmzVNetSubscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582
-          dmzVNetResourceGroupName: etp-dp-dev-na-eastus-dmz
-          dmzVNetResourceName: dp-dev-na-eastus-dmz-vnet
-          ghRunnerNSGSubscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582
-          ghRunnerNSGResourceGroupName: etp-dp-dev-na-eastus-dmz
-          ghRunnerNSGResourceName: dp-dev-na-eastus-ghrunner-vm-subnet-nsg
+          prefix.value: etp
+          env.value: tsl
+          adminUsername.value: etpAdmin
+          adminPassword.value: etpGHRunnerVM!!
+          dmzVNetSubscriptionId.value: f2f53eaa-44eb-4a72-9270-130f0c9f1582
+          dmzVNetResourceGroupName.value: etp-dp-dev-na-eastus-dmz
+          dmzVNetResourceName.value: dp-dev-na-eastus-dmz-vnet
+          ghRunnerNSGSubscriptionId.value: f2f53eaa-44eb-4a72-9270-130f0c9f1582
+          ghRunnerNSGResourceGroupName.value: etp-dp-dev-na-eastus-dmz
+          ghRunnerNSGResourceName.value: dp-dev-na-eastus-ghrunner-vm-subnet-nsg
 
       - name: Checkout Arm Template
         uses: azure/arm-deploy@v1
