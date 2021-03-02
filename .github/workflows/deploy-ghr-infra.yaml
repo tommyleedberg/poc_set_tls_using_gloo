@@ -9,6 +9,9 @@ jobs:
     name: Deploy Github Runner Resources
 
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2   
+        
       - name: Set the values in parameters file
         uses: microsoft/variable-substitution@v1
         with:
