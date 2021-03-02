@@ -1,0 +1,33 @@
+name: Deploy Github Runner Infrastructure
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-github-runner-resources:
+    runs-on: [self-hosted, etp-dp-provision]
+    name: Deploy Github Runner Resources
+
+    steps:
+      - name: Set the values in parameters file
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: templates/shared/dmz-gh-runner/vm-creation.parameters.json
+        env:
+          prefix: etp
+          env: tsl
+          adminUsername: etpAdmin
+          adminPassword: etpGHRunnerVM!!
+          dmzVNetSubscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582
+          dmzVNetResourceGroupName: etp-dp-dev-na-eastus-dmz
+          dmzVNetResourceName: dp-dev-na-eastus-dmz-vnet
+          ghRunnerNSGSubscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582
+          ghRunnerNSGResourceGroupName: etp-dp-dev-na-eastus-dmz
+          ghRunnerNSGResourceName: dp-dev-na-eastus-ghrunner-vm-subnet-nsg
+
+      - name: Checkout Arm Template
+        uses: azure/arm-deploy@v1
+        with:        
+          template: templates/shared/dmz-gh-runner/vm-creation.template.json
+          parameters: templates/shared/dmz-gh-runner/vm-creation.parameters.json
+          deploymentName: Create GitHub Runner Infra
