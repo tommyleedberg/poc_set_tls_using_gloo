@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy-github-runner-resources:
-    runs-on: [self-hosted, etp-dp-provision]
+    runs-on: [self-hosted]
     name: Deploy Github Runner Resources
 
     steps:
