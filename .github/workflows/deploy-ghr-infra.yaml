@@ -15,7 +15,7 @@ jobs:
       - name: Set the values in parameters file
         uses: microsoft/variable-substitution@v1
         with:
-          files: "../../templates/shared/dmz-gh-runner/vm-creation.parameters.json"
+          files: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
         env:
           prefix.value: etp
           env.value: tsl
@@ -31,6 +31,6 @@ jobs:
       - name: Checkout Arm Template
         uses: azure/arm-deploy@v1
         with:        
-          template: "../../templates/shared/dmz-gh-runner/vm-creation.template.json"
-          parameters: "../../templates/shared/dmz-gh-runner/vm-creation.parameters.json"
+          template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
+          parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
           deploymentName: Create GitHub Runner Infra
