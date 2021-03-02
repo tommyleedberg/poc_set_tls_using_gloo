@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "prefix": {
+        "value": "etp"
+      },
+      "env": {
+        "value": "tsl"
+      },
+      "adminUsername": {
+        "value": "etpAdmin"
+      },
+      "adminPassword": {
+        "value": "etpGHRunnerVM!!"
+      },
+      "dmzVNetSubscriptionId": {
+        "value": "f2f53eaa-44eb-4a72-9270-130f0c9f1582"
+      },
+      "dmzVNetResourceGroupName": {
+        "value": "etp-dp-dev-na-eastus-dmz"
+      },
+      "dmzVNetResourceName": {
+        "value": "dp-dev-na-eastus-dmz-vnet"
+      },
+      "ghRunnerNSGSubscriptionId": {
+        "value": "f2f53eaa-44eb-4a72-9270-130f0c9f1582"
+      },
+      "ghRunnerNSGResourceGroupName": {
+        "value": "etp-dp-dev-na-eastus-dmz"
+      },
+      "ghRunnerNSGResourceName": {
+        "value": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg"
+      }
+    }
+  }
