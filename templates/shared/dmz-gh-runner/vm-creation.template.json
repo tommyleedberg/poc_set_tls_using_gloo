@@ -72,6 +72,18 @@
             "metadata": {
                 "description": "The username used to login to the github runner vm."
             }
+        }, 
+        "githubRepoUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "The repository to link the GitHub runner to."
+            }
+        },
+        "githubRepoToken": {
+            "type": "string",
+            "metadata": {
+                "description": "The token to set up the GitHub runner."
+            }
         }
     },
     "variables": {
@@ -342,6 +354,33 @@
                 "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('githubRunnerVMDiagStName'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('githubRunnerVMDiagStName'))]"
             ]
+        },
+        {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[variables('gitHubRunnerVMName')]/config-app",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'), copyindex())]"
+            ],
+            "tags": {
+                "displayName": "config-app"
+            },
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
+                    ],
+                    "timestamp":123456789
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('sudo sh ./configure-gh-runner.sh', ' ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]"
+                }
+            }
         }
     ]
 }
