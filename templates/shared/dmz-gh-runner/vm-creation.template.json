@@ -31,48 +31,48 @@
                 "description": "The password used to login to the github runner vm."
             }
         },
-        "dmzVNetSubscriptionId":{
+        "dmzVNetSubscriptionId": {
             "type": "string",
             "defaultValue": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
             "metadata": {
                 "description": "The username used to login to the github runner vm."
             }
         },
-        "dmzVNetResourceGroupName":{
+        "dmzVNetResourceGroupName": {
             "type": "string",
             "defaultValue": "etp-dp-dev-na-eastus-dmz",
             "metadata": {
                 "description": "The username used to login to the github runner vm."
             }
         },
-        "dmzVNetResourceName":{
+        "dmzVNetResourceName": {
             "type": "string",
             "defaultValue": "dp-dev-na-eastus-dmz-vnet",
             "metadata": {
                 "description": "The username used to login to the github runner vm."
             }
         },
-        "ghRunnerNSGSubscriptionId":{
+        "ghRunnerNSGSubscriptionId": {
             "type": "string",
             "defaultValue": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
             "metadata": {
                 "description": "The username used to login to the github runner vm."
             }
         },
-        "ghRunnerNSGResourceGroupName":{
+        "ghRunnerNSGResourceGroupName": {
             "type": "string",
             "defaultValue": "etp-dp-dev-na-eastus-dmz",
             "metadata": {
                 "description": "The username used to login to the github runner vm."
             }
         },
-        "ghRunnerNSGResourceName":{
+        "ghRunnerNSGResourceName": {
             "type": "string",
             "defaultValue": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg",
             "metadata": {
                 "description": "The username used to login to the github runner vm."
             }
-        }, 
+        },
         "githubRepoUrl": {
             "type": "string",
             "metadata": {
@@ -87,10 +87,11 @@
         }
     },
     "variables": {
-        "apiVersion_St":"2020-08-01-preview",
-        "apiVersion_PIP":"2020-05-01",
+        "apiVersion_St": "2020-08-01-preview",
+        "apiVersion_PIP": "2020-05-01",
         "apiVersion_Vm": "2020-06-01",
         "apiVersion_NIC": "2020-05-01",
+        "apiVersion_DeploymentScript": "2015-01-01",
         "githubRunnerNICName": "[concat(parameters('prefix'), '-nic-ghr-', parameters('env'))]",
         "gitHubRunnerPIPName": "[concat(parameters('prefix'), '-pip-ghr-', parameters('env'))]",
         "gitHubRunnerVMName": "[concat(parameters('prefix'), '-vm-ghr-', parameters('env'))]",
@@ -99,8 +100,7 @@
         "ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]"
 
     },
-    "resources": [
-        {
+    "resources": [{
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "[variables('apiVersion_PIP')]",
             "name": "[variables('gitHubRunnerPIPName')]",
@@ -180,7 +180,8 @@
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
-                            "storageAccountType": "Premium_LRS"                        },
+                            "storageAccountType": "Premium_LRS"
+                        },
                         "diskSizeGB": 30
                     },
                     "dataDisks": []
@@ -197,11 +198,9 @@
                     "allowExtensionOperations": true
                 },
                 "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('githubRunnerNICName'))]"
-                        }
-                    ]
+                    "networkInterfaces": [{
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('githubRunnerNICName'))]"
+                    }]
                 },
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
@@ -231,6 +230,31 @@
             }
         },
         {
+            "type": "Extensions",
+            "apiVersion": "2019-03-01",
+            "name": "config-app",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', concat(variables('gitHubRunnerVMName'), copyindex()))]"
+            ],
+            "tags": {
+                "displayName": "config-app"
+            },
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.1",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "timestamp": 123456789
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('sudo sh ./configure-gh-runner.sh', ' ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]",
+                    "fileUris": ["https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"]
+                }
+            }
+        },
+        {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "[variables('apiVersion_NIC')]",
             "name": "[variables('githubRunnerNICName')]",
@@ -239,23 +263,21 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('gitHubRunnerPIPName'))]"
             ],
             "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAddress": "10.238.248.196",
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('gitHubRunnerPIPName'))]"
-                            },
-                            "subnet": {
-                                "id": "[concat(variables('dmzVnetId'), '/subnets/githubrunner-subnet')]"
-                            },
-                            "primary": true,
-                            "privateIPAddressVersion": "IPv4"
-                        }
+                "ipConfigurations": [{
+                    "name": "ipconfig1",
+                    "properties": {
+                        "privateIPAddress": "10.238.248.196",
+                        "privateIPAllocationMethod": "Dynamic",
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('gitHubRunnerPIPName'))]"
+                        },
+                        "subnet": {
+                            "id": "[concat(variables('dmzVnetId'), '/subnets/githubrunner-subnet')]"
+                        },
+                        "primary": true,
+                        "privateIPAddressVersion": "IPv4"
                     }
-                ],
+                }],
                 "dnsSettings": {
                     "dnsServers": []
                 },
@@ -294,7 +316,7 @@
                 "name": "Standard_LRS",
                 "tier": "Standard"
             },
-            "properties": {          
+            "properties": {
                 "shareDeleteRetentionPolicy": {
                     "enabled": true,
                     "days": 7
@@ -354,33 +376,6 @@
                 "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('githubRunnerVMDiagStName'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('githubRunnerVMDiagStName'))]"
             ]
-        },
-        {
-            "apiVersion": "2018-06-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('gitHubRunnerVMName'), '/config-app')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
-            ],
-            "tags": {
-                "displayName": "config-app"
-            },
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.10",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
-                    ],
-                    "timestamp":123456789
-                },
-                "protectedSettings": {
-                    "commandToExecute": "[concat('sudo sh ./configure-gh-runner.sh', ' ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]"
-                }
-            }
         }
     ]
 }
