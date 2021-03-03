@@ -37,7 +37,8 @@ jobs:
 
       - name: Checkout Arm Template
         uses: azure/arm-deploy@v1
-        with:        
+        with:
+          subscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582        
           resourceGroupName: etp-rg-ghr-tsl
           template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
           parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
