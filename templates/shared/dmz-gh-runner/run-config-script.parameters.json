@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "prefix": {
+            "value": "etp"
+        },
+        "env": {
+            "value": "tsl"
+        },
+        "adminUsername": {
+            "value": "ghrunner"
+        },
+        "githubRepoUrl": {
+            "value": "https://github.com/peterotoole/github-actions-course-template"
+        },
+        "githubRepoToken": {
+            "value": "AP4PSXW5J3CPE73GBVFTTNDAGVZEQ"
+        },
+        "githubConfigurationScriptSasToken": {
+            "value": "https://tdpdevpeterfileshare.blob.core.windows.net/github-runner-scripts/configure-gh-runner.sh?se=2021-02-26T17%3A07Z&sp=r&spr=https&sv=2018-11-09&sr=b&sig=uB8ADb14BMJr0A30dRlI19O8z3uf2/Hsgx8Uw2U1CUw%3D"
+        }
+    }
+}

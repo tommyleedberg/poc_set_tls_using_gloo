@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceGroupName": {
+            "value": "dp-dev-petertesting-rg-eu"
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "virtualMachineName": {
+            "value": "dp-dev-petertestingghr-vm-eu"
+        },
+        "adminUsername": {
+            "value": "ghrunner"
+        },
+        "dependencyInstallScriptSasToken": {
+            "value": "https://tdpdevpeterfileshare.blob.core.windows.net/github-runner-scripts/install-dependencies.sh?se=2021-02-26T17%3A07Z&sp=r&spr=https&sv=2018-11-09&sr=b&sig=0U%2BVOUmVW5LqMCCEuFK0cXDjFmK7T20nycC7e6BJTHM%3D"
+        }
+    }
+}

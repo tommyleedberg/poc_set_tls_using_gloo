@@ -1,0 +1,57 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceGroupName": {
+            "type": "String"
+        },
+        "location": {
+            "type": "String"
+        },
+        "virtualMachineName": {
+            "type": "String"
+        },
+        "adminUsername": {
+            "type": "String"
+        },
+        "dependencyInstallScriptSasToken": {
+            "type": "String"
+        }
+    },
+    "variables": {
+        "scriptCommand": "[concat('sudo sh ./install-dependencies.sh', ' ', parameters('adminUsername'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "name": "microsoft.custom-script-linux-20210222164935",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+            ],
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifactsmigration/microsoft.custom-script-linux-arm.2.0.56/Artifacts/MainTemplate.json"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[parameters('virtualMachineName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "fileUris": {
+                        "value": [
+                            "[parameters('dependencyInstallScriptSasToken')]"
+                        ]
+                    },
+                    "commandToExecute": {
+                        "value": "[variables('scriptCommand')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
