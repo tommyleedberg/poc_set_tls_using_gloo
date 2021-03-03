@@ -29,11 +29,17 @@ jobs:
           parameters.ghRunnerNSGResourceGroupName.value: etp-dp-dev-na-eastus-dmz
           parameters.ghRunnerNSGResourceName.value: dp-dev-na-eastus-ghrunner-vm-subnet-nsg
 
+      - name: Azure Login
+        run: az login --identity
+
+      - name: Set Azure Subscription
+        run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"       
+
       - name: Checkout Arm Template
         uses: azure/arm-deploy@v1
         with:        
-          subscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582
           resourceGroupName: etp-rg-ghr-tsl
           template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
           parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
+          deploymentMode: Incremental
           deploymentName: Create GitHub Runner Infra
