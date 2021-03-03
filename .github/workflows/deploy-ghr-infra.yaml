@@ -33,12 +33,24 @@ jobs:
         run: az login --identity
 
       - name: Set Azure Subscription
-        run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"       
+        run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
+           
+      - name: Create Resource Group if it doesnt exist
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if $(az group exists --name ${{ env.ResourceGroupName }}) ; then
+              echo "Azure resource group already exists, skipping creation..."
+            else
+              az group create --name ${{ env.ResourceGroupName }} --location ${{ env.ResourceGroupLocation }}
+              echo "Azure resource group created"
+            fi
 
       - name: Checkout Arm Template
         uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582        
+      
+        with:        
           resourceGroupName: etp-rg-ghr-tsl
           template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
           parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
