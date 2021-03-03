@@ -31,14 +31,6 @@ on:
         description: 'The name of the DMZ resource.'
         required: false
         default: 'dp-dev-na-eastus-dmz-vnet'
-      ghRunnerNSGSubscriptionId:
-        description: 'The subscription Id that the GitHub Runner VMs NSG is on.'
-        required: false
-        default: 'f2f53eaa-44eb-4a72-9270-130f0c9f1582'
-      ghRunnerNSGResourceGroupName:
-        description: 'The resource group name that the gGitHub Runner VMs NSG is in.'
-        required: false
-        default: 'etp-dp-dev-na-eastus-dmz'
       ghRunnerNSGResourceName:
         description: 'The name of the GitHub Runner VMs NSG resource.'
         required: false
@@ -72,8 +64,8 @@ jobs:
           parameters.dmzVNetSubscriptionId.value: ${{ github.event.inputs.dmzVNetSubscriptionId }}
           parameters.dmzVNetResourceGroupName.value: ${{ github.event.inputs.dmzVNetResourceGroupName }}
           parameters.dmzVNetResourceName.value: ${{ github.event.inputs.dmzVNetResourceName }}
-          parameters.ghRunnerNSGSubscriptionId.value: ${{ github.event.inputs.ghRunnerNSGSubscriptionId }}
-          parameters.ghRunnerNSGResourceGroupName.value: ${{ github.event.inputs.ghRunnerNSGResourceGroupName }}
+          parameters.ghRunnerNSGSubscriptionId.value: ${{ github.event.inputs.dmzVNetSubscriptionId }}
+          parameters.ghRunnerNSGResourceGroupName.value: ${{ github.event.inputs.dmzVNetResourceGroupName }}
           parameters.ghRunnerNSGResourceName.value: ${{ github.event.inputs.ghRunnerNSGResourceName }}
           parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
           parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
