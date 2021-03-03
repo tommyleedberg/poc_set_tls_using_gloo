@@ -2,6 +2,53 @@ name: Deploy Github Runner VM Infrastructure
 
 on:
   workflow_dispatch:
+    inputs:
+      prefix:
+        description: 'Prefix added to azure resources names to be globally unique (lowercase only).'     
+        default: 'etp'
+        required: false
+      env:
+        description: 'Target environment (dev, int...) Suffix added to azure resources names to be globally unique (lowercase only).'     
+        required: false 
+        default: 'tsl'
+      adminUsername:
+        description: 'The admin username that will be used to log onto the runner vm.'     
+        required: false
+        default: 'etpAdmin'
+      adminPassword:
+        description: 'The admin password that will be used to log onto the runner vm.'
+        required: false
+        default: 'etpGHRunnerVM!!'
+      dmzVNetSubscriptionId:
+        description: 'The subscription Id that the DMZs VNet is on.'
+        required: false
+        default: 'f2f53eaa-44eb-4a72-9270-130f0c9f1582'
+      dmzVNetResourceGroupName:
+        description: 'The resource group name that the DMZ Vnet is in.'
+        required: false
+        default: 'etp-dp-dev-na-eastus-dmz'
+      dmzVNetResourceName:
+        description: 'The name of the DMZ resource.'
+        required: false
+        default: 'dp-dev-na-eastus-dmz-vnet'
+      ghRunnerNSGSubscriptionId:
+        description: 'The subscription Id that the GitHub Runner VMs NSG is on.'
+        required: false
+        default: 'f2f53eaa-44eb-4a72-9270-130f0c9f1582'
+      ghRunnerNSGResourceGroupName:
+        description: 'The resource group name that the gGitHub Runner VMs NSG is in.'
+        required: false
+        default: 'etp-dp-dev-na-eastus-dmz'
+      ghRunnerNSGResourceName:
+        description: 'The name of the GitHub Runner VMs NSG resource.'
+        required: false
+        default: 'dp-dev-na-eastus-ghrunner-vm-subnet-nsg'
+      githubRepoUrl:
+        description: 'The repository to link the GitHub runner to.'
+        required: true
+      githubRepoToken:
+        description: 'The token to set up the GitHub runner.'
+        required: true
 
 jobs:
   deploy-github-runner-resources:
@@ -18,16 +65,18 @@ jobs:
         with:
           files: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
         env:
-          parameters.prefix.value: etp
-          parameters.env.value: tsl
-          parameters.adminUsername.value: etpAdmin
-          parameters.adminPassword.value: etpGHRunnerVM!!
-          parameters.dmzVNetSubscriptionId.value: f2f53eaa-44eb-4a72-9270-130f0c9f1582
-          parameters.dmzVNetResourceGroupName.value: etp-dp-dev-na-eastus-dmz
-          parameters.dmzVNetResourceName.value: dp-dev-na-eastus-dmz-vnet
-          parameters.ghRunnerNSGSubscriptionId.value: f2f53eaa-44eb-4a72-9270-130f0c9f1582
-          parameters.ghRunnerNSGResourceGroupName.value: etp-dp-dev-na-eastus-dmz
-          parameters.ghRunnerNSGResourceName.value: dp-dev-na-eastus-ghrunner-vm-subnet-nsg
+          parameters.prefix.value: ${{ github.event.inputs.prefix }}
+          parameters.env.value: ${{ github.event.inputs.env }}
+          parameters.adminUsername.value: ${{ github.event.inputs.adminUsername }}
+          parameters.adminPassword.value: ${{ github.event.inputs.adminPassword }}
+          parameters.dmzVNetSubscriptionId.value: ${{ github.event.inputs.dmzVNetSubscriptionId }}
+          parameters.dmzVNetResourceGroupName.value: ${{ github.event.inputs.dmzVNetResourceGroupName }}
+          parameters.dmzVNetResourceName.value: ${{ github.event.inputs.dmzVNetResourceName }}
+          parameters.ghRunnerNSGSubscriptionId.value: ${{ github.event.inputs.ghRunnerNSGSubscriptionId }}
+          parameters.ghRunnerNSGResourceGroupName.value: ${{ github.event.inputs.ghRunnerNSGResourceGroupName }}
+          parameters.ghRunnerNSGResourceName.value: ${{ github.event.inputs.ghRunnerNSGResourceName }}
+          parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
+          parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
 
       - name: Azure Login
         run: az login --identity
