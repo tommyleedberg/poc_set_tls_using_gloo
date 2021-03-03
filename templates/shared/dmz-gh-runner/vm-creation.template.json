@@ -235,7 +235,7 @@
             "name": "config-app",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', concat(variables('gitHubRunnerVMName'), copyindex()))]"
+                "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
             "tags": {
                 "displayName": "config-app"
