@@ -1,46 +1,91 @@
-name: Deploy Github Runner Infrastructure
+name: Set Upstream TLS on a specified route
 
 on:
   workflow_dispatch:
-
-jobs:
-  deploy-github-runner-resources:
+    inputs:
+      keyVaultName:
+        description: The name of the Azure Key Vault where the certificate and certificate password are stored
+        required: true
+      certificateName:
+        description: The name of the certificate in Azure Key Vault
+        required: true
+      virtualServiceName:
+        description: The name of the virtual service
+        required: true
+      virtualServiceNamespace:
+        description: The name of the virtual service namespace
+        required: true
+  
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+ 
+jobs:   
+  initialize:
     runs-on: [self-hosted]
-    name: Deploy Github Runner Resources
-
+   
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2   
+      - name: Create a temporary directory and path into it
+        run: mkdir temp
         
-      - name: Set the values in parameters file
-        uses: microsoft/variable-substitution@v1
-        id: parameters-file-replacement
-        with:
-          files: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
-        env:
-          parameters.prefix.value: etp
-          parameters.env.value: tsl
-          parameters.adminUsername.value: etpAdmin
-          parameters.adminPassword.value: etpGHRunnerVM!!
-          parameters.dmzVNetSubscriptionId.value: f2f53eaa-44eb-4a72-9270-130f0c9f1582
-          parameters.dmzVNetResourceGroupName.value: etp-dp-dev-na-eastus-dmz
-          parameters.dmzVNetResourceName.value: dp-dev-na-eastus-dmz-vnet
-          parameters.ghRunnerNSGSubscriptionId.value: f2f53eaa-44eb-4a72-9270-130f0c9f1582
-          parameters.ghRunnerNSGResourceGroupName.value: etp-dp-dev-na-eastus-dmz
-          parameters.ghRunnerNSGResourceName.value: dp-dev-na-eastus-ghrunner-vm-subnet-nsg
-
+  removeOldSecret:
+    needs: [initialize]
+    runs-on: [self-hosted]
+    
+    steps:
+        # try to get the previous secret, kubectl returns an error if it doesnt exist so if the request is successful delete the previous secret
+      - name: Get previous secret name
+        id: previousSecret
+        run: kubectl get secret ${{ github.event.inputs.virtualServiceName }}-secret -n ${{ github.event.inputs.virtualServiceNamespace }}
+        continue-on-error: true
+        
+      - name: Remove secret if it exists
+        if: steps.previousSecret.outcome == 'success'
+        run: kubectl.exe delete secret ${{ github.event.inputs.virtualServiceName }}-secret -n ${{ github.event.inputs.virtualServiceNamespace }}
+        
+  deploy:
+    needs: [removeOldSecret]
+    runs-on: [self-hosted]
+    defaults:
+      run:
+        working-directory:  ./temp
+    
+    steps:
       - name: Azure Login
         run: az login --identity
 
       - name: Set Azure Subscription
-        run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"       
+        run: az account set --subscription "US018129-Cumulus dev"
 
-      - name: Checkout Arm Template
-        uses: azure/arm-deploy@v1
+      - name: Get Certificate 
+        run:  az keyvault secret download --file dataprocessing.pfx --vault-name ${{ github.event.inputs.keyVaultName }} --name ${{ github.event.inputs.certificateName }} --encoding base64
+        
+      - name: Get secrets
+        uses: Azure/get-keyvault-secrets@v1.0
+        id: certificatePass
         with:
-          subscriptionId: f2f53eaa-44eb-4a72-9270-130f0c9f1582        
-          resourceGroupName: etp-rg-ghr-tsl
-          template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
-          parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
-          deploymentMode: Incremental
-          deploymentName: Create GitHub Runner Infra
+          keyvault: ${{ github.event.inputs.keyVaultName }}
+          secrets: "CertificatePass"
+            
+      - name: Unpack the pfx into a .crt file
+        run: openssl pkcs12 -in dataprocessing.pfx -clcerts -nokeys -out dataprocessing.crt -passin "pass:"
+        
+      - name: Unpack the pfx into an encrypted .key file
+        run: openssl pkcs12 -in dataprocessing.pfx -nocerts -out dataprocessing-encrypted.key -passin "pass:" -passout "pass:steps.getSecrets.CertificatePass"
+        
+      - name: Create an unencrypted keyfile for k8s
+        run: openssl rsa -in dataprocessing-encrypted.key -out dataprocessing.key -passin "pass:steps.getSecrets.CertificatePass"
+        
+      - name: Add certificate to K8s cert store
+        run: kubectl create secret tls ${{ github.event.inputs.virtualServiceName }}-secret --key ".\dataprocessing.key" --cert ".\dataprocessing.crt" --namespace ${{ github.event.inputs.virtualServiceNamespace }}
+
+      - name: Set VirtualService to reference new secret
+        run: glooctl edit vs --name ${{ github.event.inputs.virtualServiceName }} --namespace ${{ github.event.inputs.virtualServiceNamespace }} --ssl-secret-name ${{ github.event.inputs.virtualServiceName }}-secre --ssl-secret-namespace ${{ github.event.inputs.virtualServiceNamespace }}
+      
+  cleanup:
+    runs-on: [self-hosted]
+    needs: [deploy]
+    if: "always()"
+
+    steps:
+      - name: Clean up certificate from runner
+        run: rmdir temp -force -recurse
