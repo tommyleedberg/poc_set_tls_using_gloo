@@ -230,7 +230,7 @@
             }
         },
         {
-            "type": "Extensions",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-03-01",
             "name": "config-app",
             "location": "[resourceGroup().location]",
@@ -246,6 +246,7 @@
                 "typeHandlerVersion": "2.1",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
+                    "skipDos2Unix": true,
                     "timestamp": 123456789
                 },
                 "protectedSettings": {
