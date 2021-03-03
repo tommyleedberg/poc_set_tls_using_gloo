@@ -1,4 +1,4 @@
-name: Deploy Github Runner Infrastructure
+name: Deploy Github Runner VM Infrastructure
 
 on:
   workflow_dispatch:
@@ -46,4 +46,4 @@ jobs:
           template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
           parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
           deploymentMode: Incremental
-          deploymentName: Create GitHub Runner Infra
+          deploymentName: Create_GitHub_Runner_VM_Infra
