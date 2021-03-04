@@ -11,9 +11,12 @@ jobs:
         working-directory:  /home/etpAdmin/
         
     steps:
+      - name: Login as user
+        run: sudo -i -u etpAdmin
+        
       - name: Install Homebrew
         # Install homebrew silently by redirecting stdin to dev/null
-        run: sudo -u etpAdmin /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
         
       - name: Install Azure cli
         run: brew install azure-cli
