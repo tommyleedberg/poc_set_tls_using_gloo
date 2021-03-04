@@ -6,10 +6,7 @@ on:
 jobs:   
   initialize:
     runs-on: [dmz-runner]
-    defaults:
-      run:
-        working-directory:  ./home/etpAdmin
-        
+       
     steps:
       - name: Install Homebrew
         # Install homebrew silently by redirecting stdin to dev/null
