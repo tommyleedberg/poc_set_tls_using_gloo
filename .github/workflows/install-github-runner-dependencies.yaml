@@ -1,0 +1,34 @@
+name: Install GitHub Runner Dependencies
+
+on:
+  workflow_dispatch:
+   
+jobs:   
+  initialize:
+    runs-on: [dmz-runner]
+    defaults:
+      run:
+        working-directory:  ./home/etpAdmin
+        
+    steps:
+      - name: Install Homebrew
+        # Install homebrew silently by redirecting stdin to dev/null
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
+        
+      - name: Install Azure cli
+        run: brew install azure-cli
+                
+      - name: Install Node
+        run: brew install node
+        
+      - name: Install Helm
+        run: brew install helm
+        
+      - name: Install KubeCtl
+        run: brew install kubectl
+        
+      - name: Install GlooCtl
+        run: brew install glooctl
+        
+      - name: Install Go
+        run: brew install go
