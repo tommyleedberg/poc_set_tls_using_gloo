@@ -12,7 +12,7 @@ runnerVersion="2.277.1"
 # Additional variables :) 
 runnerDownloadUrl="https://github.com/actions/runner/releases/download/v$runnerVersion/actions-runner-linux-x64-$runnerVersion.tar.gz"
 runnerPackageName="./actions-runner-linux-x64-$runnerVersion.tar.gz"
-defaultLabels="'self-hosted,Linux,X64'"
+defaultLabels="dmz-runner"
 
 # Validate input variables
 user_id=`id -u $user`
