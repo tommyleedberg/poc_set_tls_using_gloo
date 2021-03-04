@@ -69,7 +69,7 @@ jobs:
           parameters.ghRunnerNSGResourceName.value: ${{ github.event.inputs.ghRunnerNSGResourceName }}
           parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
           parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
-          parameters.githubRunnerConfigurationScriptUri.value: ${{ github.event.inputs.githubRunnerConfigurationScriptUri }}
+          parameters.githubRunnerConfigurationScriptUri.value: "https://raw.githubusercontent.com/tommyleedberg/poc_set_tls_using_gloo/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
 
       - name: Azure Login
         run: az login --identity
