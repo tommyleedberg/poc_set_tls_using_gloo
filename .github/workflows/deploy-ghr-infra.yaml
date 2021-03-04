@@ -41,6 +41,9 @@ on:
       githubRepoToken:
         description: 'The token to set up the GitHub runner.'
         required: true
+      githubRunnerConfigurationScriptUri:
+        description: ''
+        required: true
 
 jobs:
   deploy-github-runner-resources:
@@ -69,6 +72,7 @@ jobs:
           parameters.ghRunnerNSGResourceName.value: ${{ github.event.inputs.ghRunnerNSGResourceName }}
           parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
           parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
+          parameters.githubRunnerConfigurationScriptUri.value: ${{ github.event.inputs.githubRunnerConfigurationScriptUri }}
 
       - name: Azure Login
         run: az login --identity
