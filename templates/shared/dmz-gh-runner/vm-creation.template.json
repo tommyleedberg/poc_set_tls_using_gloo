@@ -234,7 +234,7 @@
                     "timestamp": 123456789,
                     "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken')",
                     "fileUris": [
-                        "[parameters('githubRunnerConfigurationScriptUri'))]"
+                        "[parameters('githubRunnerConfigurationScriptUri')]"
                     ]
                 }
             }
