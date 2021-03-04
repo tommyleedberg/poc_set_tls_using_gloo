@@ -222,10 +222,6 @@
                 "type": "CustomScript",
                 "typeHandlerVersion": "2.1",
                 "autoUpgradeMinorVersion": true,
-                "mode": "Incremental",
-                "debugSetting": {
-                    "detailLevel": "requestContent, responseContent"
-                },
                 "settings": {
                     "skipDos2Unix": false,
                     "timestamp": 123456789,
