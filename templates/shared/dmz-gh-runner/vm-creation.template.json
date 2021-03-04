@@ -231,7 +231,7 @@
                 "settings": {
                     "skipDos2Unix": false,
                     "timestamp": 123456789,
-                    "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken')",
+                    "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]",
                     "fileUris": [
                         "[parameters('githubRunnerConfigurationScriptUri')]"
                     ]
