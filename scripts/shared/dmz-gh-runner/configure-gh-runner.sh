@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Set variables for user, repo url, and token
+user=$1
+repo_url=$2
+repo_token=$3
+runner_labels=$4
+
 # Package versions
 runnerVersion="2.277.1"
 
@@ -7,12 +13,6 @@ runnerVersion="2.277.1"
 runnerDownloadUrl="https://github.com/actions/runner/releases/download/v$runnerVersion/actions-runner-linux-x64-$runnerVersion.tar.gz"
 runnerPackageName="./actions-runner-linux-x64-$runnerVersion.tar.gz"
 defaultLabels="'self-hosted,Linux,X64'"
-
-# Set variables for user, repo url, and token
-user=$1
-repo_url=$2
-repo_token=$3
-runner_labels=$4
 
 # Validate input variables
 user_id=`id -u $user`
