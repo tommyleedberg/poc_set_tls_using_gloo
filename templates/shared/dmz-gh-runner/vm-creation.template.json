@@ -223,11 +223,11 @@
                 "typeHandlerVersion": "2.1",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "skipDos2Unix": false,
+                    "skipDos2Unix": true,
                     "timestamp": 123456789
                 },
                 "protectedSettings": {
-                    "commandToExecute": "sh ./configure-gh-runner.sh etpAdmin https://github.com/tommyleedberg/poc_set_tls_using_gloo ABPJ25BPXUAGE65CFKWV6HTAIAKNU",
+                    "commandToExecute": "sudo sh ./configure-gh-runner.sh etpAdmin https://github.com/tommyleedberg/poc_set_tls_using_gloo ABPJ25BPXUAGE65CFKWV6HTAIAKNU",
                     "fileUris": ["https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"]
                 }
             }
