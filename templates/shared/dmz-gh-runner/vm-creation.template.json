@@ -84,6 +84,13 @@
             "metadata": {
                 "description": "The token to set up the GitHub runner."
             }
+        },
+        "githubRunnerConfigurationScriptUri": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/tommyleedberg/poc_set_tls_using_gloo/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh",
+            "metadata": {
+                "description": "The location of the configuration script that will set up the GitHub Runner"
+            }
         }
     },
     "variables": {
@@ -225,9 +232,9 @@
                 "settings": {
                     "skipDos2Unix": false,
                     "timestamp": 123456789,
-                    "commandToExecute": "sh configure-gh-runner.sh etpAdmin https://github.com/tommyleedberg/poc_set_tls_using_gloo ABPJ25DQ2VI2ORDO4NFGLD3AIFH5K",
+                    "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken')",
                     "fileUris": [
-                        "https://raw.githubusercontent.com/tommyleedberg/poc_set_tls_using_gloo/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
+                        "[parameters('githubRunnerConfigurationScriptUri'))]"
                     ]
                 }
             }
