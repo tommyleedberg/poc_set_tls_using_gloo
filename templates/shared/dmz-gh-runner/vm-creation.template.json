@@ -210,32 +210,25 @@
             }
         },
         {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "name": "configureGitHubRunner",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(variables('gitHubRunnerVMName'), '/configureGitHubRunner')]",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
             "properties": {
-                "mode": "incremental",
-                "templateLink": {
-                    "uri": "https://catalogartifact.azureedge.net/publicartifactsmigration/microsoft.custom-script-linux-arm.2.0.56/Artifacts/MainTemplate.json"
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.1",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "skipDos2Unix": false,
+                    "timestamp": 123456789
                 },
-                "parameters": {
-                    "vmName": {
-                        "value": "[variables('gitHubRunnerVMName')]"
-                    },
-                    "location": {
-                        "value": "[resourceGroup().location]"
-                    },
-                    "fileUris": {
-                        "value": [
-                            "https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
-                        ]
-                    },
-                    "commandToExecute": {
-                        "value": "sh ./configure-gh-runner.sh etpAdmin https://github.com/tommyleedberg/poc_set_tls_using_gloo ABPJ25BPXUAGE65CFKWV6HTAIAKNU"
-                    }
+                "protectedSettings": {
+                    "commandToExecute": "sh ./configure-gh-runner.sh etpAdmin https://github.com/tommyleedberg/poc_set_tls_using_gloo ABPJ25BPXUAGE65CFKWV6HTAIAKNU",
+                    "fileUris": ["https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"]
                 }
             }
         },
