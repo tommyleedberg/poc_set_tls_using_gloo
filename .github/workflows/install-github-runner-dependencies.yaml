@@ -5,7 +5,7 @@ on:
    
 jobs:   
   initialize:
-    runs-on: [self-hosted, Linux]
+    runs-on: [dmz-runner]
     defaults:
       run:
         working-directory:  ./home/etpAdmin
