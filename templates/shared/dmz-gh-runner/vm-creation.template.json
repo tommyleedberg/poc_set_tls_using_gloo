@@ -210,22 +210,32 @@
             }
         },
         {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "apiVersion": "[variables('apiVersion_Vm')]",
-            "name": "[concat(variables('gitHubRunnerVMName'), '/enablevmaccess')]",
-            "location": "[resourceGroup().location]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "name": "configureGitHubRunner",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"
+                "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
             "properties": {
-                "autoUpgradeMinorVersion": true,
-                "publisher": "Microsoft.OSTCExtensions",
-                "type": "VMAccessForLinux",
-                "typeHandlerVersion": "1.4",
-                "settings": {},
-                "protectedSettings": {
-                    "username": "[parameters('adminUsername')]",
-                    "password": "[parameters('adminPassword')]"
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifactsmigration/microsoft.custom-script-linux-arm.2.0.56/Artifacts/MainTemplate.json"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[variables('gitHubRunnerVMName')]"
+                    },
+                    "location": {
+                        "value": "[resourceGroup().location]"
+                    },
+                    "fileUris": {
+                        "value": [
+                            "https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
+                        ]
+                    },
+                    "commandToExecute": {
+                        "value": "sudo sh ./configure-gh-runner.sh etpAdmin 'https://github.com/tommyleedberg/poc_set_tls_using_gloo' 'ABPJ25BPXUAGE65CFKWV6HTAIAKNU'"
+                    }
                 }
             }
         },
@@ -351,36 +361,6 @@
                 "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('githubRunnerVMDiagStName'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('githubRunnerVMDiagStName'))]"
             ]
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "name": "configureGitHubRunner",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
-            ],
-            "properties": {
-                "mode": "incremental",
-                "templateLink": {
-                    "uri": "https://catalogartifact.azureedge.net/publicartifactsmigration/microsoft.custom-script-linux-arm.2.0.56/Artifacts/MainTemplate.json"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[variables('gitHubRunnerVMName')]"
-                    },
-                    "location": {
-                        "value": "[resourceGroup().location]"
-                    },
-                    "fileUris": {
-                        "value": [
-                            "https://github.com/tommyleedberg/poc_set_tls_using_gloo/blob/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
-                        ]
-                    },
-                    "commandToExecute": {
-                        "value": "sudo sh ./configure-gh-runner.sh etpAdmin 'https://github.com/tommyleedberg/poc_set_tls_using_gloo' 'ABPJ25BPXUAGE65CFKWV6HTAIAKNU'"
-                    }
-                }
-            }
         }
     ]
 }
