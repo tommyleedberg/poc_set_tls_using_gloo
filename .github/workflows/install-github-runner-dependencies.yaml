@@ -12,7 +12,8 @@ jobs:
         
     steps:
       - name: Install Homebrew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # Install homebrew silently by redirecting stdin to dev/null
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
         
       - name: Install Azure cli
         run: brew install azure-cli
