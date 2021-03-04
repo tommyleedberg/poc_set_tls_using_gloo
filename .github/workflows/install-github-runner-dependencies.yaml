@@ -6,7 +6,7 @@ on:
 jobs:   
   initialize:
     runs-on: [self-hosted, Linux]
-     defaults:
+    defaults:
       run:
         working-directory:  ./home/etpAdmin
         
