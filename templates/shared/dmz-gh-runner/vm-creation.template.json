@@ -355,7 +355,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
-            "name": "[concat(variables('gitHubRunnerVMName'), '/configureGitHubRunner')]",
+            "name": "configureGitHubRunner']",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
