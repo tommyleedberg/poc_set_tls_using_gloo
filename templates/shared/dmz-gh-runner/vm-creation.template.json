@@ -357,7 +357,7 @@
             "apiVersion": "2015-01-01",
             "name": "[concat(variables('gitHubRunnerVMName'), '/configureGitHubRunner')]",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('gitHubRunnerVMName'))]"
+                "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
             "properties": {
                 "mode": "incremental",
@@ -366,10 +366,10 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[parameters('gitHubRunnerVMName')]"
+                        "value": "[variables('gitHubRunnerVMName')]"
                     },
                     "location": {
-                        "value": "[parameters('location')]"
+                        "value": "[resourceGroup().location]"
                     },
                     "fileUris": {
                         "value": [
