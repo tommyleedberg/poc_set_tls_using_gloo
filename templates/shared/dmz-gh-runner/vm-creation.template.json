@@ -225,7 +225,7 @@
                 "settings": {
                     "skipDos2Unix": false,
                     "timestamp": 123456789,
-                    "commandToExecute": "sh configure-gh-runner.sh etpAdmin https://github.com/tommyleedberg/poc_set_tls_using_gloo ABPJ25BPXUAGE65CFKWV6HTAIAKNU",
+                    "commandToExecute": "sh configure-gh-runner.sh etpAdmin https://github.com/tommyleedberg/poc_set_tls_using_gloo ABPJ25DQ2VI2ORDO4NFGLD3AIFH5K",
                     "fileUris": [
                         "https://raw.githubusercontent.com/tommyleedberg/poc_set_tls_using_gloo/main/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
                     ]
