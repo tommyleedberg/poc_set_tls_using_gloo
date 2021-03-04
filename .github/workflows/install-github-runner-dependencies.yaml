@@ -11,12 +11,12 @@ jobs:
         working-directory:  ./home/etpAdmin
         
     steps:
-      - name: Install Azure cli
-        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-        
       - name: Install Homebrew
         run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         
+      - name: Install Azure cli
+        run: brew install azure-cli
+                
       - name: Install Node
         run: brew install node
         
