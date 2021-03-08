@@ -16,7 +16,7 @@ jobs:
         run: sudo apt update -y && sudo apt upgrade -y
         
       - name: test
-        run: sudo -i -H u etpAdmin
+        run: sudo -i -H -u etpAdmin
         
       - name: Install Homebrew
         run: sudo etpAdmin sumkdir ~/.linuxbrew/bin;
