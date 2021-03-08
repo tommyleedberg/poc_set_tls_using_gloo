@@ -16,6 +16,6 @@ jobs:
         run: sudo apt update -y && sudo apt upgrade -y
         
       - name: Clone Homebrew
-        run: sudo -u etpAdmin git clone https://github.com/Homebrew/brew ~/../etpAdmin/.linuxbrew/Homebrew;
+        run: git clone https://github.com/Homebrew/brew .linuxbrew/Homebrew;
         
     
