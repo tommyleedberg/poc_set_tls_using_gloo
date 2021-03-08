@@ -16,7 +16,7 @@ jobs:
         run: sudo apt update -y && sudo apt upgrade -y
         
       - name: Clone Homebrew
-        run: sudo apt install linuxbrew-wrapper
+        run: sudo apt install linuxbrew-wrapper -y
         
       - name: check brew
         run: brew -h < /dev/null
