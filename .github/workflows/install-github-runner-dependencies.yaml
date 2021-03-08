@@ -19,15 +19,16 @@ jobs:
         run: sudo -i -H -u etpAdmin
         
       - name: Clone Homebrew
-        run: git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
+        run: git clone https://github.com/Homebrew/brew ~/../etpAdmin/.linuxbrew/Homebrew;
+        
       - name: Create a new directiory for homebrews bin
-        run: mkdir ~/.linuxbrew/bin;
+        run: mkdir ~/../etpAdmin/.linuxbrew/bin;
         
       - name: Create a symbolic linx to the bin dir
-        run: ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
+        run: ln -s ~/../etpAdmin/Homebrew/bin/brew ~/../etpAdmin/.linuxbrew/bin;
          
       - name: Test the shell
-        run: eval $(~/.linuxbrew/bin/brew shellenv)
+        run: eval $(~/../etpAdmin/.linuxbrew/bin/brew shellenv)
                 
       - name: Install Azure cli
         run: brew install azure-cli
