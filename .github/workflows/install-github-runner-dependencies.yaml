@@ -25,17 +25,17 @@ jobs:
         run: sudo -u etpAdmin -i brew install azure-cli
                 
       - name: Install Node
-        run: brew install node
+        run: sudo -u etpAdmin -i brew install node
         
       - name: Install Helm
-        run: brew install helm
+        run: sudo -u etpAdmin -i brew install helm
         
       - name: Install KubeCtl
-        run: brew install kubectl
+        run: sudo -u etpAdmin -i rew install kubectl
         
       - name: Install GlooCtl
-        run: brew install glooctl
+        run: sudo -u etpAdmin -i brew install glooctl
         
       - name: Install Go
-        run: brew install go
+        run: sudo -u etpAdmin -i brew install go
     
