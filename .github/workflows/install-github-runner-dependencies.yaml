@@ -11,6 +11,9 @@ jobs:
         working-directory:  /home/etpAdmin/
         
     steps:
+      - name: Update and Upgrade
+        run: sudo apt update -y && sudo apt upgrade -y
+        
       - name: Login as user
         run: sudo -i -u etpAdmin
         
