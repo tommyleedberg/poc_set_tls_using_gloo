@@ -18,4 +18,30 @@ jobs:
       - name: Clone Homebrew
         run: git clone https://github.com/Homebrew/brew .linuxbrew/Homebrew;
         
+      - name: Create a new directiory for homebrews bin
+        run: mkdir .linuxbrew/bin;
+        
+      - name: Create a symbolic linx to the bin dir
+        run: ln -s .linuxbrew/Homebrew/bin/brew .linuxbrew/bin;
+         
+      - name: Test the shell
+        run: eval $(.linuxbrew/bin/brew shellenv)
+                
+      - name: Install Azure cli
+        run: brew install azure-cli
+                
+      - name: Install Node
+        run: brew install node
+        
+      - name: Install Helm
+        run: brew install helm
+        
+      - name: Install KubeCtl
+        run: brew install kubectl
+        
+      - name: Install GlooCtl
+        run: brew install glooctl
+        
+      - name: Install Go
+        run: brew install go
     
