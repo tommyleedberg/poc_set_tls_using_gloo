@@ -21,12 +21,15 @@ jobs:
       - name: Create a new directiory for homebrews bin
         run: mkdir .linuxbrew/bin;
         
-      - name: Create a symbolic linx to the bin dir
-        run: ln -s .linuxbrew/Homebrew/bin/brew .linuxbrew/bin;
-         
-      - name: Test the shell
-        run: eval $(.linuxbrew/bin/brew shellenv)
-                
+      - name: Add brew to path
+        run: export PATH=".linuxbrew/bin:$PATH"
+        
+      - name: Add brew to path
+        run: export MANPATH=".linuxbrew/share/man:$MANPATH"
+
+      - name: Add brew to path
+        run: export INFOPATH=".linuxbrew/share/info:$INFOPATH"
+               
       - name: Install Azure cli
         run: brew install azure-cli
                 
