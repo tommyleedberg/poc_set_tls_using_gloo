@@ -16,10 +16,7 @@ jobs:
     steps:
       - name: Update and Upgrade
         run: sudo apt update -y && sudo apt upgrade -y
-        
-      - name: Login under etpAdmin
-        run: sudo -u etpAdmin
-        
+              
       - name: Install Homebrew
         run: mkdir ~/.linuxbrew/bin;
              git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
