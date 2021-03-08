@@ -14,27 +14,30 @@ jobs:
     steps:
       - name: Update and Upgrade
         run: sudo apt update -y && sudo apt upgrade -y
-                   
+        
+      - name: test
+        run: sudo -iu etpAdmin
+        
       - name: Install Homebrew
-        run: sudo -u etpAdmin mkdir ~/.linuxbrew/bin;
-             sudo -u etpAdmin git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
-             sudo -u etpAdmin ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
-             sudo -u etpAdmin eval $(~/.linuxbrew/bin/brew shellenv)
+        run: mkdir ~/.linuxbrew/bin;
+             git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
+             ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
+             eval $(~/.linuxbrew/bin/brew shellenv)
         
       - name: Install Azure cli
-        run: sudo -u etpAdmin brew install azure-cli
+        run: brew install azure-cli
                 
       - name: Install Node
-        run: sudo brew install node
+        run: brew install node
         
       - name: Install Helm
-        run: sudo -u etpAdmin brew install helm
+        run: brew install helm
         
       - name: Install KubeCtl
-        run: sudo -u etpAdmin brew install kubectl
+        run: brew install kubectl
         
       - name: Install GlooCtl
-        run: sudo -u etpAdmin brew install glooctl
+        run: brew install glooctl
         
       - name: Install Go
-        run: sudo -u etpAdmin brew install go
+        run: brew install go
