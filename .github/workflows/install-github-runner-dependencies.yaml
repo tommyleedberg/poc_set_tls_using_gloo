@@ -19,7 +19,7 @@ jobs:
         run: sudo -i -H -u etpAdmin
         
       - name: Install Homebrew
-        run:  sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"  > /dev/null
+        run:  sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"  < /dev/null
         
       - name: Create a symbolic linx to the bin dir
         run: test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
