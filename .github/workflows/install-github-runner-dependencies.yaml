@@ -16,7 +16,7 @@ jobs:
         
       - name: Install Homebrew
         # Install homebrew silently by redirecting stdin to dev/null
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < etpGHRunnerVM!!
         
       - name: Install Azure cli
         run: brew install azure-cli
