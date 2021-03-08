@@ -18,7 +18,7 @@ jobs:
         run: sudo -i -u etpAdmin
         
       - name: Install Homebrew
-        run: sudo apt install linuxbrew-wrapper -y
+        run: echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
         
       - name: Update path for homebrew
         run: export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin${PATH+:$PATH}"
@@ -28,7 +28,10 @@ jobs:
              export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
              export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
         
-      - name: nstall Azure cli
+      - name: Set brew user
+        run: brew --help < etpGHRunnerAdmin!!
+        
+      - name: Install Azure cli
         run: sudo -u etpAdmin brew install azure-cli
                 
       - name: Install Node
