@@ -16,19 +16,19 @@ jobs:
         run: sudo apt update -y && sudo apt upgrade -y
         
       - name: Clone Homebrew
-        run: git clone https://github.com/Homebrew/brew .linuxbrew/Homebrew;
+        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
         
       - name: Create a new directiory for homebrews bin
-        run: mkdir .linuxbrew/bin;
+        run: export brew=/home/linuxbrew/.linuxbrew/bin
         
       - name: Add brew to path
-        run: export PATH=".linuxbrew/bin:$PATH"
+        run: test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
         
       - name: Add brew to path
-        run: export MANPATH=".linuxbrew/share/man:$MANPATH"
+        run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
       - name: Add brew to path
-        run: export INFOPATH=".linuxbrew/share/info:$INFOPATH"
+        run: test -r ~/.profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
                
       - name: Install Azure cli
         run: brew install azure-cli
