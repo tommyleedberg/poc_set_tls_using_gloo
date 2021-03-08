@@ -18,22 +18,17 @@ jobs:
       - name: Test
         run: sudo -i -H -u etpAdmin
         
-      - name: Install Homebrew
-        run:  sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"  < /dev/null
+      - name: Clone Homebrew
+        run: git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
+      - name: Create a new directiory for homebrews bin
+        run: mkdir ~/.linuxbrew/bin;
         
       - name: Create a symbolic linx to the bin dir
-        run: test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+        run: ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
          
       - name: Test the shell
-        run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+        run: eval $(~/.linuxbrew/bin/brew shellenv)
                 
-      - name: Test the shell
-        run: test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
-        
-      - name: Test the shell
-        run: echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
-
-        
       - name: Install Azure cli
         run: brew install azure-cli
                 
