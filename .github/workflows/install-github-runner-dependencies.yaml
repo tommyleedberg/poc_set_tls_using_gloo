@@ -15,18 +15,10 @@ jobs:
         run: sudo apt update -y && sudo apt upgrade -y
               
       - name: Install Homebrew
-        run: sudo -u etpAdmin echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-        
-      - name: Update path for homebrew
-        run: export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin${PATH+:$PATH}"
-             export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
-             export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
-             export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
-             export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
-             export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
-        
-      - name: Set brew user
-        run: brew --help < etpGHRunnerAdmin!!
+        run: mkdir ~/.linuxbrew/bin;
+             git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
+             ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
+             eval $(~/.linuxbrew/bin/brew shellenv)
         
       - name: Install Azure cli
         run: sudo -u etpAdmin brew install azure-cli
