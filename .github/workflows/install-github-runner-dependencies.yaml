@@ -16,20 +16,11 @@ jobs:
         run: sudo apt update -y && sudo apt upgrade -y
         
       - name: Clone Homebrew
-        run: sudo -u etpAdmin /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < /dev/null
+        run: sudo apt install linuxbrew-wrapper
         
-      - name: Create a new directiory for homebrews bin
-        run: export brew=/home/linuxbrew/.linuxbrew/bin
+      - name: check brew
+        run: brew -h < /dev/null
         
-      - name: Add brew to path
-        run: test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-        
-      - name: Add brew to path
-        run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
-      - name: Add brew to path
-        run: test -r ~/.profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
-               
       - name: Install Azure cli
         run: brew install azure-cli
                 
