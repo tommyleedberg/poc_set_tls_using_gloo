@@ -19,7 +19,8 @@ jobs:
         run: sudo -i -H -u etpAdmin
         
       - name: Install Homebrew
-        run: mkdir ~/.linuxbrew/bin;
+        run: echo whoami;
+             mkdir ~/.linuxbrew/bin;
              git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
              ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
              eval $(~/.linuxbrew/bin/brew shellenv)
