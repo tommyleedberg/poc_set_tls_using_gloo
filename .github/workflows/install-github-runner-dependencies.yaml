@@ -16,7 +16,7 @@ jobs:
         run: sudo apt update -y && sudo apt upgrade -y
         
       - name: Clone Homebrew
-        run: sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        run: sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < /dev/null
         
       - name: Create a new directiory for homebrews bin
         run: export brew=/home/linuxbrew/.linuxbrew/bin
