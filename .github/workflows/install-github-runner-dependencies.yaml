@@ -6,6 +6,9 @@ on:
 jobs:   
   initialize:
     runs-on: [dmz-runner]
+    container:
+      options: --user etpAdmin
+      
     defaults:
       run:
         working-directory:  /home/etpAdmin/
