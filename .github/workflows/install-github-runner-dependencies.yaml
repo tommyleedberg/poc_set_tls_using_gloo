@@ -14,13 +14,16 @@ jobs:
     steps:
       - name: Update and Upgrade
         run: sudo apt update -y && sudo apt upgrade -y
-                
-      - name: Install Homebrew
-        run: git clone https://github.com/Homebrew/brew ~/../etpAdmin/.linuxbrew/Homebrew;
-             mkdir ~/../etpAdmin/.linuxbrew/bin;
-             ln -s ../Homebrew/bin/brew ~/../etpAdmin/.linuxbrew/bin;
-             eval $(~/../etpAdmin/.linuxbrew/bin/brew shellenv)
+           
+      - name: Test
+        run: sudo -i -H -u etpAdmin
         
+      - name: Install Homebrew
+        run: git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
+             mkdir ~/.linuxbrew/bin;
+             ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
+             eval $(~/.linuxbrew/bin/brew shellenv)
+                
       - name: Install Azure cli
         run: brew install azure-cli
                 
