@@ -28,8 +28,8 @@ jobs:
              export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
              export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
         
-      - name: Install Azure cli
-        run: brew install azure-cli
+      - name: nstall Azure cli
+        run: sudo -u etpAdmin brew install azure-cli
                 
       - name: Install Node
         run: brew install node
