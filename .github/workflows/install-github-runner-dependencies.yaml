@@ -14,13 +14,10 @@ jobs:
     steps:
       - name: Update and Upgrade
         run: sudo apt update -y && sudo apt upgrade -y
-        
-      - name: test
-        run: sudo -H -u etpAdmin
-        
+                
       - name: Install Homebrew
         run: whoami;
-             sudo -H -u etpAdmin mkdir ~/.linuxbrew/bin;
+             sudo -i -H -u etpAdmin mkdir ~/.linuxbrew/bin;
              git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew;
              ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin;
              eval $(~/.linuxbrew/bin/brew shellenv)
