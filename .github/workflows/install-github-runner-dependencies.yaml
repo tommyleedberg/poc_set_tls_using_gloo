@@ -37,4 +37,4 @@ jobs:
         run: sudo -u etpAdmin brew install glooctl
         
       - name: Install Go
-        run: brew install go
+        run: sudo -u etpAdmin brew install go
