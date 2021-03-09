@@ -20,7 +20,7 @@ jobs:
         
     steps:
       - name: Install Homebrew
-        run: sudo -u etpAdmin -i /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        run: sudo -u etpAdmin /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
         
       - name: Check that the ~/.linuxbrew directory exists and run brew in a shell
         run: test -d /home/linuxbrew/.linuxbrew
