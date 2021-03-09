@@ -17,9 +17,11 @@ jobs:
 
     steps:
       - name: Install Homebrew
-        run: sudo apt install linuxbrew-wrapper -y
-      - name: check brew
-        run: sudo -u etpAdmin -i brew -h
+        run: sudo -u etpAdmin -i sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - name: Check that the ~/.linuxbrew directory exists and run brew in a shell
+        run: sudo -u etpAdmin -i test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv) 
+      - name: Update the bash profile with the homebrew path
+        run: sudo -u etpAdmin -i echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 
   Install_Tools:
     runs-on: [dmz-runner]
