@@ -25,8 +25,8 @@ jobs:
       - name: Check that the /home/linuxbrew/.linuxbrew directory exists and run brew in a shell
         run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
         
-      - name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
-        run: sudo -u etpAdmin -i test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+      #- name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
+      #  run: sudo -u etpAdmin -i test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
       
       - name: Update the bash profile with the homebrew path
         run: sudo -u etpAdmin -i echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
