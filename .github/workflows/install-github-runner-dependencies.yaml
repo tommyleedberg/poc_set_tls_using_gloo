@@ -17,9 +17,17 @@ jobs:
 
     steps:
       - name: Install Homebrew
-        run: sudo -u etpAdmin -i sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        run: sudo -u etpAdmin -i /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        
       - name: Check that the ~/.linuxbrew directory exists and run brew in a shell
-        run: sudo -u etpAdmin -i test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv) 
+        run: sudo -u etpAdmin -i test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+        
+      #- name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
+      #  run: sudo -u etpAdmin -i test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+        
+      #- name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
+      #  run: test -r ~/.bash_profile && echo eval" ($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+      
       - name: Update the bash profile with the homebrew path
         run: sudo -u etpAdmin -i echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 
