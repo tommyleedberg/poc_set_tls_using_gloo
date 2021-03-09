@@ -2,40 +2,48 @@ name: Install GitHub Runner Dependencies
 
 on:
   workflow_dispatch:
-   
+
 jobs:   
-  initialize:
+  Update System:
     runs-on: [dmz-runner]
-    
-    defaults:
-      run:
-        working-directory:  /home/etpAdmin/
-        
+
     steps:
-      - name: Update and Upgrade
-        run: sudo apt update -y && sudo apt upgrade -y
-        
-      - name: Clone Homebrew
+     - name: Update and Upgrade
+       run: sudo apt update -y && sudo apt upgrade -y
+
+  Install Homebrew:
+    runs-on: [dmz-runner]
+    needs: [Update System] 
+
+    steps:
+      - name: Install Homebrew
         run: sudo apt install linuxbrew-wrapper -y
-        
       - name: check brew
         run: sudo -u etpAdmin -i brew -h
-        
+
+  Install Tools:
+    runs-on: [dmz-runner]
+    needs: [Install Homebrew]
+    defaults:
+      run:
+        working-directory:  /home/etpAdmin/    
+
+    steps:
       - name: Install Azure cli
         run: sudo -u etpAdmin -i brew install azure-cli
-                
+
       - name: Install Node
         run: sudo -u etpAdmin -i brew install node
-        
+
       - name: Install Helm
         run: sudo -u etpAdmin -i brew install helm
-        
+
       - name: Install KubeCtl
         run: sudo -u etpAdmin -i rew install kubectl
-        
+
       - name: Install GlooCtl
         run: sudo -u etpAdmin -i brew install glooctl
-        
+
       - name: Install Go
         run: sudo -u etpAdmin -i brew install go
-    
+
