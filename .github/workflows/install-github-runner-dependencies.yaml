@@ -20,7 +20,7 @@ jobs:
         
     steps:
       - name: Install Homebrew sliently
-        run: sudo apt install linuxbrew-wrapper -y
+        run: sudo -u etpAdmin -i apt install linuxbrew-wrapper -y
         
       - name: Test that linuxbrew exists and update the shell path with it
         run: test -d /home/etpAdmin/.linuxbrew && eval $(/home/etpAdmin/.linuxbrew/bin/brew shellenv)
