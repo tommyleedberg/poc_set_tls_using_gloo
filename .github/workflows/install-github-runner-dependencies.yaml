@@ -14,7 +14,10 @@ jobs:
   Install_Homebrew:
     runs-on: [dmz-runner]
     needs: [Update_System] 
-
+    defaults:
+      run:
+        working-directory:  /home/etpAdmin/
+        
     steps:
       - name: Install Homebrew
         run: sudo -u etpAdmin -i /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
