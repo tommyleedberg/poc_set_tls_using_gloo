@@ -29,7 +29,11 @@ jobs:
         
       - name: Test that linuxbrew exists and update the shell path with it
         run: test -d /home/etpAdmin/.linuxbrew && eval $(/home/etpAdmin/.linuxbrew/bin/brew shellenv)
-
+             
+      - name: Update etpAdmins profile 
+        run: echo "eval \$($(brew --prefix)/bin/brew shellenv)" >> /home/etpAdmin/.profile
+        
+        
   installTools:
     name: Install tools
     runs-on: [dmz-runner]
