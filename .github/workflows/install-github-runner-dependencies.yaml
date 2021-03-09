@@ -4,16 +4,16 @@ on:
   workflow_dispatch:
 
 jobs:   
-  Update System:
+  Update_System:
     runs-on: [dmz-runner]
 
     steps:
      - name: Update and Upgrade
        run: sudo apt update -y && sudo apt upgrade -y
 
-  Install Homebrew:
+  Install_Homebrew:
     runs-on: [dmz-runner]
-    needs: [Update System] 
+    needs: [Update_System] 
 
     steps:
       - name: Install Homebrew
@@ -21,9 +21,9 @@ jobs:
       - name: check brew
         run: sudo -u etpAdmin -i brew -h
 
-  Install Tools:
+  Install_Tools:
     runs-on: [dmz-runner]
-    needs: [Install Homebrew]
+    needs: [Install_Homebrew]
     defaults:
       run:
         working-directory:  /home/etpAdmin/    
