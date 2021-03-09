@@ -19,17 +19,11 @@ jobs:
         working-directory:  /home/etpAdmin/
         
     steps:
-      - name: Clone Homebrew into /home/linuxbrew/.linuxbrew
-        run: git clone https://github.com/Homebrew/linuxbrew.git /home/linuxbrew/.linuxbrew
+      - name: Install Homebrew sliently
+        run: sudo apt install linuxbrew-wrapper -y
         
-      - name: Check that the /home/linuxbrew/.linuxbrew directory exists and run brew in a shell
-        run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-        
-      #- name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
-      #  run: sudo -u etpAdmin -i test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
-      
-      - name: Update the bash profile with the homebrew path
-        run: sudo -u etpAdmin -i echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+      - name: check brew
+        run: sudo -u etpAdmin -i brew -h
 
   Install_Tools:
     runs-on: [dmz-runner]
@@ -49,7 +43,7 @@ jobs:
         run: sudo -u etpAdmin -i brew install helm
 
       - name: Install KubeCtl
-        run: sudo -u etpAdmin -i rew install kubectl
+        run: sudo -u etpAdmin -i brew install kubectl
 
       - name: Install GlooCtl
         run: sudo -u etpAdmin -i brew install glooctl
