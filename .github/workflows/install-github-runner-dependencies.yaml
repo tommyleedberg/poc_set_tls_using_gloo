@@ -27,9 +27,6 @@ jobs:
       - name: Run brew for the first time to create the .linuxbrew directory
         run: sudo -u etpAdmin -i brew -h
         
-      - name: Set brew path
-        run: export brew=/home/etpAdmin/.linuxbrew/bin
-        
       - name: Test that linuxbrew exists and update the shell path with it
         run: test -d /home/etpAdmin/.linuxbrew && eval $(/home/etpAdmin/.linuxbrew/bin/brew shellenv)
              
