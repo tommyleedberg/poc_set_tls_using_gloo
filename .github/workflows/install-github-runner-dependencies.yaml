@@ -4,30 +4,33 @@ on:
   workflow_dispatch:
 
 jobs:   
-  Update_System:
+  updateSystem:
+    name: Update and Upgrade apt
     runs-on: [dmz-runner]
-
+    
     steps:
      - name: Update and Upgrade
        run: sudo apt update -y && sudo apt upgrade -y
 
-  Install_Homebrew:
+  installHomebrew:
+    name: Install Homebrew
     runs-on: [dmz-runner]
-    needs: [Update_System] 
+    needs: [updateSystem] 
     defaults:
       run:
         working-directory:  /home/etpAdmin/
         
     steps:
       - name: Install Homebrew sliently
-        run: sudo -u etpAdmin -i apt install linuxbrew-wrapper -y
+        run: sudo apt install linuxbrew-wrapper -y
         
       - name: Test that linuxbrew exists and update the shell path with it
         run: test -d /home/etpAdmin/.linuxbrew && eval $(/home/etpAdmin/.linuxbrew/bin/brew shellenv)
 
-  Install_Tools:
+  installTools:
+    name: Install tools
     runs-on: [dmz-runner]
-    needs: [Install_Homebrew]
+    needs: [installHomebrew]
     defaults:
       run:
         working-directory:  /home/etpAdmin/    
@@ -51,9 +54,10 @@ jobs:
       - name: Install Go
         run: sudo -u etpAdmin -i brew install go
         
-  Validate_Tools:
+  validateTools:
+      name: Validate Tools are Installed
       runs-on: [dmz-runner]
-      needs: [Install_Tools]
+      needs: [installTools]
       
       steps:
       - name: Validate Azure cli is installed
