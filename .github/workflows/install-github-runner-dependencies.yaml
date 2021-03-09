@@ -19,20 +19,17 @@ jobs:
         working-directory:  /home/etpAdmin/
         
     steps:
-      - name: Install Homebrew
+      - name: Clone Homebrew into /home/linuxbrew/.linuxbrew
         run: git clone https://github.com/Homebrew/linuxbrew.git /home/linuxbrew/.linuxbrew
         
-      - name: Check that the ~/.linuxbrew directory exists and run brew in a shell
-        run: test -d /home/linuxbrew/.linuxbrew
+      - name: Check that the /home/linuxbrew/.linuxbrew directory exists and run brew in a shell
+        run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
         
-      #- name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
-      #  run: sudo -u etpAdmin -i ln -s .linuxbrew/Homebrew/bin/brew .linuxbrew/bin
-        
-      #- name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
-      #  run: test -r ~/.bash_profile && echo eval" ($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+      - name: Check that the ~/home/linuxbure/.linuxbrew directory exists and run brew in a shell
+        run: sudo -u etpAdmin -i test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
       
       - name: Update the bash profile with the homebrew path
-        run: sudo -u etpAdmin -i eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+        run: sudo -u etpAdmin -i echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 
   Install_Tools:
     runs-on: [dmz-runner]
