@@ -22,8 +22,8 @@ jobs:
       - name: Install Homebrew sliently
         run: sudo apt install linuxbrew-wrapper -y
         
-      - name: check brew
-        run: sudo -u etpAdmin -i brew -h
+      - name: Test that linuxbrew exists and update the shell path with it
+        run: test -d /home/etpAdmin/.linuxbrew && eval $(/home/etpAdmin/.linuxbrew/bin/brew shellenv)
 
   Install_Tools:
     runs-on: [dmz-runner]
@@ -50,4 +50,27 @@ jobs:
 
       - name: Install Go
         run: sudo -u etpAdmin -i brew install go
+        
+  Validate_Tools:
+      runs-on: [dmz-runner]
+      needs: [Install_Tools]
+      
+      steps:
+      - name: Validate Azure cli is installed
+        run: sudo -u etpAdmin -i az -v
+
+      - name: Validate Node is installed
+        run: sudo -u etpAdmin node -v
+
+      - name: Validate Helm is installed
+        run: sudo -u etpAdmin -i helm version
+
+      - name: Validate KubeCtl is installed
+        run: sudo -u etpAdmin -i kubectl version
+
+      - name: Validate GlooCtl is installed
+        run: sudo -u etpAdmin -i glooctl version
+
+      - name: Validate Go is installed
+        run: sudo -u etpAdmin -i go version
 
