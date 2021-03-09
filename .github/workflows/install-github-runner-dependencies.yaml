@@ -64,19 +64,19 @@ jobs:
       
       steps:
       - name: Validate Azure cli is installed
-        run: az -v
+        run: sudo -u etpAdmin -i az -v
 
       - name: Validate Node is installed
-        run: node -v
+        run: sudo -u etpAdmin -i node -v
 
       - name: Validate Helm is installed
-        run: helm version
+        run: sudo -u etpAdmin -i helm version
 
       - name: Validate KubeCtl is installed
-        run: kubectl version
+        run: sudo -u etpAdmin -i kubectl version
 
       - name: Validate GlooCtl is installed
-        run: glooctl version
+        run: sudo -u etpAdmin -i glooctl version
 
       - name: Validate Go is installed
         run: go version
