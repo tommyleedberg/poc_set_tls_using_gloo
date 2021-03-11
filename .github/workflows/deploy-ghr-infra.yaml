@@ -17,7 +17,7 @@ on:
 
 jobs:
   deploy:
-    name: Get Configuration File
+    name: Deploy GitHub Runner Infrastructure
     runs-on: [self-hosted]
     
     steps:   
