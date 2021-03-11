@@ -27,7 +27,7 @@ jobs:
       with:
           repository: ETP-Cloud/action-get-variables
           ref: create-action
-          token: ${{ secrets.GIT_HUB_TOKEN }} # stored in GitHub secrets
+          token: ${{ secrets.ETP_GIT_HUB_TOKEN }} # stored in GitHub secrets
           path: etp-get-vars
           
     - name: Checkout
