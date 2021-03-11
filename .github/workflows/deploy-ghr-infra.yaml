@@ -21,7 +21,7 @@ jobs:
     runs-on: [self-hosted]
     
     steps:   
-    - name: Checkout GitHub Action Repo
+    - name: Checkout Action Get Variables Repo
       uses: actions/checkout@v2
       with:
           repository: ETP-Cloud/action-get-variables
@@ -29,16 +29,16 @@ jobs:
           token: ${{ secrets.ETP_GITHUB_TOKEN }} # stored in GitHub secrets
           path: etp-get-vars
           
-    - name: Get Variables
+    - name: Get variables from config/${{ github.event.inputs.env }}/deploy-ghr-infra
       id: env-variables
       uses: ./etp-get-vars
       with: 
           variable-set: 'config/${{ github.event.inputs.env }}/deploy-ghr-infra'
         
-    - name: Checkout Repo
+    - name: Checkout Etp Infra Repo
       uses: actions/checkout@v2   
         
-    - name: Set the values in parameters file
+    - name: Update ARM parameters file with values from config file
       uses: microsoft/variable-substitution@v1
       id: parameters-file-replacement
       with:
@@ -67,7 +67,7 @@ jobs:
     - name: Create Resource Group
       run: az group create --name etp-rg-ghr-tsl --location "East US"    
 
-    - name: Checkout Arm Template
+    - name: Deploy Arm Template
       uses: azure/arm-deploy@v1
     
       with:        
