@@ -30,9 +30,6 @@ jobs:
           token: ${{ secrets.ETP_GITHUB_TOKEN }} # stored in GitHub secrets
           path: etp-get-vars
           
-    - name: Checkout
-      uses: actions/checkout@v2
-
     - name: Get Variables
       id: get-vars
       uses: ./etp-get-vars
