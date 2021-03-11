@@ -30,11 +30,11 @@ jobs:
           path: etp-get-vars
           
     - name: Get Variables
-      id: get-vars
+      id: env-variables
       uses: ./etp-get-vars
       with: 
           variable-set: 'config/${{ github.event.inputs.env }}/deploy-ghr-infra'
-     
+   
     - name: Checkout Repo
       uses: actions/checkout@v2   
         
