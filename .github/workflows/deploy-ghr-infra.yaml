@@ -27,7 +27,7 @@ jobs:
       with:
           repository: ETP-Cloud/action-get-variables
           ref: create-action
-          token: ${{ secrets.ETP_GIT_HUB_TOKEN }} # stored in GitHub secrets
+          token: ${{ secrets.ETP_GITHUB_TOKEN }} # stored in GitHub secrets
           path: etp-get-vars
           
     - name: Checkout
@@ -42,6 +42,7 @@ jobs:
   deploy-github-runner-resources:
     runs-on: [self-hosted]
     name: Deploy Github Runner Resources
+    needs: [get-configuration-file]
 
     steps:
       - name: Checkout Repo
