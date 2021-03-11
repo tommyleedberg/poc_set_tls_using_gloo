@@ -34,9 +34,7 @@ jobs:
       uses: ./etp-get-vars
       with: 
           variable-set: 'config/${{ github.event.inputs.env }}/deploy-ghr-infra'
-   
-    - run: echo '${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}'
-      
+        
     - name: Checkout Repo
       uses: actions/checkout@v2   
         
