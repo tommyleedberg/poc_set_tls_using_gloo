@@ -16,12 +16,11 @@ on:
         required: true
 
 jobs:
-  get-configuration-file:
+  deploy:
     name: Get Configuration File
     runs-on: [self-hosted]
     
     steps:   
-     # checkout the private repo containing the action to run
     - name: Checkout GitHub Action Repo
       uses: actions/checkout@v2
       with:
@@ -35,51 +34,45 @@ jobs:
       uses: ./etp-get-vars
       with: 
           variable-set: 'config/${{ github.event.inputs.env }}/deploy-ghr-infra'
-
-  deploy-github-runner-resources:
-    runs-on: [self-hosted]
-    name: Deploy Github Runner Resources
-    needs: [get-configuration-file]
-
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2   
+     
+    - name: Checkout Repo
+      uses: actions/checkout@v2   
         
-      - name: Set the values in parameters file
-        uses: microsoft/variable-substitution@v1
-        id: parameters-file-replacement
-        with:
-          files: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
-        env:
-          parameters.prefix.value: ${{ steps.env-variables.outputs.prefix }}
-          parameters.env.value: ${{ steps.env-variables.outputs.env }}
-          parameters.adminUsername.value: ${{ steps.env-variables.outputs.adminUsername }}
-          parameters.adminPassword.value: ${{ steps.env-variables.outputs.adminPassword }}
-          parameters.dmzVNetSubscriptionId.value: ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}
-          parameters.dmzVNetResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
-          parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
-          parameters.ghRunnerNSGSubscriptionId.value: ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}
-          parameters.ghRunnerNSGResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
-          parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
-          parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
-          parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
-          parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}
+    - name: Set the values in parameters file
+      uses: microsoft/variable-substitution@v1
+      id: parameters-file-replacement
+      with:
+        files: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
+      env:
+        parameters.prefix.value: ${{ steps.env-variables.outputs.prefix }}
+        parameters.env.value: ${{ steps.env-variables.outputs.env }}
+        parameters.adminUsername.value: ${{ steps.env-variables.outputs.adminUsername }}
+        parameters.adminPassword.value: ${{ steps.env-variables.outputs.adminPassword }}
+        parameters.dmzVNetSubscriptionId.value: ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}
+        parameters.dmzVNetResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
+        parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
+        parameters.ghRunnerNSGSubscriptionId.value: ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}
+        parameters.ghRunnerNSGResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
+        parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
+        parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
+        parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
+        parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}
 
-      - name: Azure Login
-        run: az login --identity
+    - name: Azure Login
+      run: az login --identity
 
-      - name: Set Azure Subscription
-        run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
+    - name: Set Azure Subscription
+      run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
 
-      - name: Create Resource Group
-        run: az group create --name etp-rg-ghr-tsl --location "East US"    
+    - name: Create Resource Group
+      run: az group create --name etp-rg-ghr-tsl --location "East US"    
 
-      - name: Checkout Arm Template
-        uses: azure/arm-deploy@v1
-      
-        with:        
-          resourceGroupName: etp-rg-ghr-tsl
-          template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
-          parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
-          deploymentMode: Incremental
-          deploymentName: Create_GitHub_Runner_VM_Infra
+    - name: Checkout Arm Template
+      uses: azure/arm-deploy@v1
+    
+      with:        
+        resourceGroupName: etp-rg-ghr-tsl
+        template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
+        parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
+        deploymentMode: Incremental
+        deploymentName: Create_GitHub_Runner_VM_Infra
