@@ -52,21 +52,27 @@ jobs:
     steps:
       - name: Install Azure cli
         run: sudo -u ${{ github.event.inputs.userName }} -i brew install azure-cli
+        continue-on-error: true
 
       - name: Install Node
         run: sudo -u ${{ github.event.inputs.userName }} -i brew install node
+        continue-on-error: true
 
       - name: Install Helm
         run: sudo -u ${{ github.event.inputs.userName }} -i brew install helm
+        continue-on-error: true
 
       - name: Install KubeCtl
         run: sudo -u ${{ github.event.inputs.userName }} -i brew install kubectl
+        continue-on-error: true
 
       - name: Install GlooCtl
         run: sudo -u ${{ github.event.inputs.userName }} -i brew install glooctl
+        continue-on-error: true
 
       - name: Install Go
         run: sudo -u ${{ github.event.inputs.userName }} -i brew install go
+        continue-on-error: true
         
   validateTools:
       name: Validate Tools are Installed
@@ -77,20 +83,26 @@ jobs:
       steps:
       - name: Validate Azure cli is installed
         run: sudo -u ${{ github.event.inputs.userName }} -i az -v
+        continue-on-error: true
 
       - name: Validate Node is installed
         run: sudo -u ${{ github.event.inputs.userName }} -i node -v
+        continue-on-error: true
 
       - name: Validate Helm is installed
         run: sudo -u ${{ github.event.inputs.userName }} -i helm version
+        continue-on-error: true
 
         # instead of doing a version check with kubectl do a help check to validate it's installed.
         # at this point kubectl isnt connected to a cluster so kubectl version returns an exit code of 1 which fails this step
       - name: Validate KubeCtl is installed
         run: sudo -u ${{ github.event.inputs.userName }} -i kubectl --help
+        continue-on-error: true
 
       - name: Validate GlooCtl is installed
         run: sudo -u ${{ github.event.inputs.userName }} -i glooctl version
+        continue-on-error: true
 
       - name: Validate Go is installed
         run: sudo -u ${{ github.event.inputs.userName }} -i go version
+        continue-on-error: true
