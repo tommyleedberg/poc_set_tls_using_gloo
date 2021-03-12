@@ -1,8 +1,16 @@
+# This workflow prefixes most commands with sudo -u <username> -i to ensure that the commands are run under the correct user.
+# Without this prefix any command will try to run under the root user (which is the user that the Self-Hosted runner works under).
+
 name: Install GitHub Runner Dependencies
 
 on:
   workflow_dispatch:
-
+     inputs:
+      userName:
+        description: 'The username to create the tools under on the GitHub Runner vm'     
+        default: 'etpAdmin'
+        required: false
+        
 jobs:   
   updateSystem:
     name: Update and Upgrade apt
@@ -18,21 +26,20 @@ jobs:
     needs: [updateSystem] 
     defaults:
       run:
-        working-directory:  /home/etpAdmin/
+        working-directory:  /home/${{ github.event.inputs.userName }}/
         
     steps:
       - name: Install Homebrew sliently
         run: sudo apt install linuxbrew-wrapper -y
         
       - name: Run brew for the first time to create the .linuxbrew directory
-        run: sudo -u etpAdmin -i brew -h
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew -h
         
       - name: Test that linuxbrew exists and update the shell path with it
-        run: test -d /home/etpAdmin/.linuxbrew && eval $(/home/etpAdmin/.linuxbrew/bin/brew shellenv)
+        run: test -d /home/${{ github.event.inputs.userName }}/.linuxbrew && eval $(/home/${{ github.event.inputs.userName }}/.linuxbrew/bin/brew shellenv)
              
       - name: Update etpAdmins profile 
-        run: test -r /home/etpAdmin/.profile && echo "eval $(/home/etpAdmin/.linuxbrew/bin/brew shellenv)" >>/home/etpAdmin/.profile
-        
+        run: test -r /home/${{ github.event.inputs.userName }}/.profile && echo "eval $(/home/${{ github.event.inputs.userName }}/.linuxbrew/bin/brew shellenv)" >>/home/${{ github.event.inputs.userName }}/.profile
         
   installTools:
     name: Install tools
@@ -44,28 +51,22 @@ jobs:
 
     steps:
       - name: Install Azure cli
-        continue-on-error: true
-        run: sudo -u etpAdmin -i brew install azure-cli
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install azure-cli
 
       - name: Install Node
-        continue-on-error: true
-        run: sudo -u etpAdmin -i brew install node
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install node
 
       - name: Install Helm
-        continue-on-error: true
-        run: sudo -u etpAdmin -i brew install helm
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install helm
 
       - name: Install KubeCtl
-        continue-on-error: true
-        run: sudo -u etpAdmin -i brew install kubectl
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install kubectl
 
       - name: Install GlooCtl
-        continue-on-error: true
-        run: sudo -u etpAdmin -i brew install glooctl
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install glooctl
 
       - name: Install Go
-        continue-on-error: true
-        run: sudo -u etpAdmin -i brew install go
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install go
         
   validateTools:
       name: Validate Tools are Installed
@@ -75,27 +76,21 @@ jobs:
       # This is a very basic way to validate. We should add some more logic here to validate tools are specific versions.
       steps:
       - name: Validate Azure cli is installed
-        run: az -v
+        run: sudo -u ${{ github.event.inputs.userName }} -i az -v
 
-      - name: Validate Node is installed 
-        continue-on-error: true
-        run: node -v
+      - name: Validate Node is installed
+        run: sudo -u ${{ github.event.inputs.userName }} -i node -v
 
       - name: Validate Helm is installed
-        continue-on-error: true
-        run: helm version
+        run: sudo -u ${{ github.event.inputs.userName }} -i helm version
 
         # instead of doing a version check with kubectl do a help check to validate it's installed.
         # at this point kubectl isnt connected to a cluster so kubectl version returns an exit code of 1 which fails this step
       - name: Validate KubeCtl is installed
-        continue-on-error: true
-        run: kubectl --help
+        run: sudo -u ${{ github.event.inputs.userName }} -i kubectl --help
 
       - name: Validate GlooCtl is installed
-        continue-on-error: true
-        run: glooctl version
+        run: sudo -u ${{ github.event.inputs.userName }} -i glooctl version
 
       - name: Validate Go is installed
-        continue-on-error: true
-        run: go version
-
+        run: sudo -u ${{ github.event.inputs.userName }} -i go version
