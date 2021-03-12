@@ -44,21 +44,27 @@ jobs:
 
     steps:
       - name: Install Azure cli
+        continue-on-error: true
         run: sudo -u etpAdmin -i brew install azure-cli
 
       - name: Install Node
+        continue-on-error: true
         run: sudo -u etpAdmin -i brew install node
 
       - name: Install Helm
+        continue-on-error: true
         run: sudo -u etpAdmin -i brew install helm
 
       - name: Install KubeCtl
+        continue-on-error: true
         run: sudo -u etpAdmin -i brew install kubectl
 
       - name: Install GlooCtl
+        continue-on-error: true
         run: sudo -u etpAdmin -i brew install glooctl
 
       - name: Install Go
+        continue-on-error: true
         run: sudo -u etpAdmin -i brew install go
         
   validateTools:
@@ -71,20 +77,25 @@ jobs:
       - name: Validate Azure cli is installed
         run: az -v
 
-      - name: Validate Node is installed
+      - name: Validate Node is installed 
+        continue-on-error: true
         run: node -v
 
       - name: Validate Helm is installed
+        continue-on-error: true
         run: helm version
 
         # instead of doing a version check with kubectl do a help check to validate it's installed.
         # at this point kubectl isnt connected to a cluster so kubectl version returns an exit code of 1 which fails this step
       - name: Validate KubeCtl is installed
+        continue-on-error: true
         run: kubectl --help
 
       - name: Validate GlooCtl is installed
+        continue-on-error: true
         run: glooctl version
 
       - name: Validate Go is installed
+        continue-on-error: true
         run: go version
 
