@@ -1,5 +1,4 @@
-
-name: The runner to an AKS cluster
+name: Connect a GitHub runner to an AKS cluster
 
 on:
   workflow_dispatch:
