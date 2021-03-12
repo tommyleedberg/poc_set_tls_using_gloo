@@ -104,7 +104,6 @@
         "githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
         "dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
         "ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]"
-
     },
     "resources": [{
             "type": "Microsoft.Network/publicIPAddresses",
@@ -212,6 +211,26 @@
                     "bootDiagnostics": {
                         "enabled": true
                     }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "[variables('apiVersion_Vm')]",
+            "name": "[concat(variables('gitHubRunnerVMName'), '/enablevmaccess')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"
+            ],
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.OSTCExtensions",
+                "type": "VMAccessForLinux",
+                "typeHandlerVersion": "1.4",
+                "settings": {},
+                "protectedSettings": {
+                    "username": "[parameters('adminUsername')]",
+                    "password": "[parameters('adminPassword')]"
                 }
             }
         },
