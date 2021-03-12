@@ -18,10 +18,10 @@ jobs:
     steps:
     
      - name: Azure Login
-       run: sudo -u etpAdmin -i az login --identity
+       run: az login --identity
 
      - name: Set Azure Subscription
-       run: sudo -u etpAdmin -i az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
+       run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
        
      - name: Connect To Cluster
-       run: sudo -u etpAdmin -i az aks get-credentials --resource-group ${{ github.event.inputs.resourceGroup }} --name ${{ github.event.inputs.clusterName }}
+       run: az aks get-credentials --resource-group ${{ github.event.inputs.resourceGroup }} --name ${{ github.event.inputs.clusterName }}
