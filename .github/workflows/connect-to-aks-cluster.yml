@@ -3,9 +3,6 @@ name: Connect a GitHub runner to an AKS cluster
 on:
   workflow_dispatch:
     inputs:
-      runnerTags:
-        description: 'The tags for the runner to connect to the AKS cluster.'
-        required: true
       resourceGroup:
         description: 'The resource group of the AKS cluster.'     
         required: true 
@@ -21,10 +18,10 @@ jobs:
     steps:
     
      - name: Azure Login
-       run: az login --identity
+       run: sudo -u etpAdmin -i az login --identity
 
      - name: Set Azure Subscription
-       run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
+       run: sudo -u etpAdmin -i az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
        
      - name: Connect To Cluster
-       run: az aks get-credentials --resource-group ${{ github.event.inputs.resourceGroup }} --name ${{ github.event.inputs.clusterName }}
+       run: sudo -u etpAdmin -i az aks get-credentials --resource-group ${{ github.event.inputs.resourceGroup }} --name ${{ github.event.inputs.clusterName }}
