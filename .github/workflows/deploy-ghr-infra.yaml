@@ -18,7 +18,7 @@ on:
 jobs:
   deploy:
     name: Deploy GitHub Runner Infrastructure
-    runs-on: [self-hosted]
+    runs-on: [ubuntu-latest]
     
     steps:   
     - name: Checkout Action Get Variables Repo
