@@ -27,7 +27,6 @@ jobs:
       uses: actions/checkout@v2
       with:
           repository: ETP-Cloud/action-get-variables
-          ref: create-action
           token: ${{ secrets.ETP_GITHUB_TOKEN }}
           path: etp-get-vars
       
