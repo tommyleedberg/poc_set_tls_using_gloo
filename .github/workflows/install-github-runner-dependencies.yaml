@@ -29,7 +29,7 @@ jobs:
         working-directory:  /home/${{ github.event.inputs.userName }}/
         
     steps:
-      - name: Install Homebrew sliently
+      - name: Install Homebrew silently
         run: sudo apt install linuxbrew-wrapper -y
         
       - name: Run brew for the first time to create the .linuxbrew directory
