@@ -94,33 +94,16 @@
     },
     "variables": {
         "apiVersion_St": "2020-08-01-preview",
-        "apiVersion_PIP": "2020-05-01",
         "apiVersion_Vm": "2020-06-01",
         "apiVersion_NIC": "2020-05-01",
         "apiVersion_DeploymentScript": "2015-01-01",
         "githubRunnerNICName": "[concat(parameters('prefix'), '-nic-ghr-', parameters('env'))]",
-        "gitHubRunnerPIPName": "[concat(parameters('prefix'), '-pip-ghr-', parameters('env'))]",
         "gitHubRunnerVMName": "[concat(parameters('prefix'), '-vm-ghr-', parameters('env'))]",
         "githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
         "dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
         "ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]"
     },
-    "resources": [{
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "[variables('apiVersion_PIP')]",
-            "name": "[variables('gitHubRunnerPIPName')]",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "Basic"
-            },
-            "properties": {
-                "ipAddress": "20.185.248.165",
-                "publicIPAddressVersion": "IPv4",
-                "publicIPAllocationMethod": "Dynamic",
-                "idleTimeoutInMinutes": 4,
-                "ipTags": []
-            }
-        },
+    "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "[variables('apiVersion_St')]",
@@ -261,19 +244,13 @@
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "[variables('apiVersion_NIC')]",
             "name": "[variables('githubRunnerNICName')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', variables('gitHubRunnerPIPName'))]"
-            ],
+            "location": "[resourceGroup().location]",           
             "properties": {
                 "ipConfigurations": [{
                     "name": "ipconfig1",
                     "properties": {
                         "privateIPAddress": "10.238.248.196",
                         "privateIPAllocationMethod": "Dynamic",
-                        "publicIPAddress": {
-                            "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('gitHubRunnerPIPName'))]"
-                        },
                         "subnet": {
                             "id": "[concat(variables('dmzVnetId'), '/subnets/githubrunner-subnet')]"
                         },
