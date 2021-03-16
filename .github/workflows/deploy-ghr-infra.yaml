@@ -28,16 +28,16 @@ jobs:
           ref: create-action
           token: ${{ secrets.ETP_GITHUB_TOKEN }} # stored in GitHub secrets
           path: etp-get-vars
-          
+  
+    - name: Checkout Etp Infra Repo
+      uses: actions/checkout@v2   
+      
     - name: Get variables from config/${{ github.event.inputs.env }}/deploy-ghr-infra
       id: env-variables
       uses: ./etp-get-vars
       with: 
           variable-set: 'config/${{ github.event.inputs.env }}/deploy-ghr-infra'
-        
-    - name: Checkout Etp Infra Repo
-      uses: actions/checkout@v2   
-        
+          
     - name: Update ARM parameters file with values from config file
       uses: microsoft/variable-substitution@v1
       id: parameters-file-replacement
