@@ -20,7 +20,10 @@ jobs:
     name: Deploy GitHub Runner Infrastructure
     runs-on: [ubuntu-latest]
     
-    steps:   
+    steps:       
+    - name: Checkout Etp Infra Repo
+      uses: actions/checkout@v2  
+      
     - name: Checkout Action Get Variables Repo
       uses: actions/checkout@v2
       with:
@@ -28,9 +31,6 @@ jobs:
           ref: create-action
           token: ${{ secrets.ETP_GITHUB_TOKEN }} # stored in GitHub secrets
           path: etp-get-vars
-  
-    - name: Checkout Etp Infra Repo
-      uses: actions/checkout@v2   
       
     - name: Get variables from config/${{ github.event.inputs.env }}/deploy-ghr-infra
       id: env-variables
