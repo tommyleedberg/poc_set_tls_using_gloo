@@ -33,7 +33,7 @@ jobs:
       
     - name: Get Github Runner Configuration script
       id: get-config-script
-      run: echo '::set-output name=configurationScript::' cat /scripts/shared/configure-gh-runner.sh
+      run: echo '::set-output name=configurationScript::' & cat /scripts/shared/configure-gh-runner.sh
       
     - name: Get variables from config/${{ github.event.inputs.env }}/deploy-ghr-infra
       id: env-variables
