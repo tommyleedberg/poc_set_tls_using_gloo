@@ -28,7 +28,7 @@ jobs:
       with:
           repository: ETP-Cloud/action-get-variables
           ref: create-action
-          token: ${{ secrets.ETP_GITHUB_TOKEN }} # stored in GitHub secrets
+          token: ${{ secrets.ETP_GITHUB_TOKEN }} # GitHub User Token
           path: etp-get-vars
       
     - name: Get variables from config/${{ github.event.inputs.env }}/deploy-ghr-infra
@@ -60,7 +60,7 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }} # Azure Service Principle required
+        creds: ${{ secrets.AZURE_CREDENTIALS }} # Azure Service Principle
 
     - name: Set Azure Subscription
       run: az account set --subscription ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}  
