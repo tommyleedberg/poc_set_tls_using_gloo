@@ -3,10 +3,12 @@ name: Connect a GitHub runner to an AKS cluster
 on:
   workflow_dispatch:
     inputs:
-      userName:
-        description: 'The username to create the tools under on the GitHub Runner vm'     
-        default: 'etpAdmin'
-        required: false
+      runnerUserName:
+        description: 'The username to run the commands on.'
+        default: etpAdmin
+      subscriptionId:
+        description: 'The subscription id that the resources live on.'
+        default: 'f2f53eaa-44eb-4a72-9270-130f0c9f1582'
       resourceGroup:
         description: 'The resource group of the AKS cluster.'     
         required: true 
@@ -20,12 +22,11 @@ jobs:
     runs-on: [dmz-runner]
     
     steps:
-    
      - name: Azure Login
-       run: sudo -u ${{ github.event.inputs.userName }} -i az login --identity
+       run: sudo -u ${{ github.event.inputs.runnerUserName }} -i az login --identity
 
      - name: Set Azure Subscription
-       run: sudo -u ${{ github.event.inputs.userName }} -i az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
+       run: sudo -u ${{ github.event.inputs.runnerUserName }} -i az account set --subscription ${{ github.event.inputs.subscriptionId }} 
        
      - name: Connect To Cluster
-       run: sudo -u ${{ github.event.inputs.userName }} -i az aks get-credentials --resource-group ${{ github.event.inputs.resourceGroup }} --name ${{ github.event.inputs.clusterName }}
+       run: sudo -u ${{ github.event.inputs.runnerUserName }} -i az aks get-credentials --resource-group ${{ github.event.inputs.resourceGroup }} --name ${{ github.event.inputs.clusterName }}
