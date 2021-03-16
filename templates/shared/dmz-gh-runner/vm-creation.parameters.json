@@ -38,7 +38,7 @@
         "githubRepoToken": {
             "value": ""
         },
-        "githubRunnerConfigurationScriptPath":{
+        "githubRunnerConfigurationScript":{
             "value": ""
         }
     }
