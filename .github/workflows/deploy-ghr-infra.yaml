@@ -59,7 +59,9 @@ jobs:
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}
 
     - name: Azure Login
-      run: az login --identity
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }
 
     - name: Set Azure Subscription
       run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
