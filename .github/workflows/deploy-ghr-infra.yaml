@@ -6,8 +6,7 @@ on:
     inputs:
       env:
         description: 'Environment name where configuration is stored'     
-        required: false 
-        default: 'tsl'
+        required: true 
       githubRepoUrl:
         description: 'The repository to link the GitHub runner to.'
         required: true
@@ -61,10 +60,10 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }} # Azure Service Principle required
 
     - name: Set Azure Subscription
-      run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
+      run: az account set --subscription ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}  
 
     - name: Create Resource Group
       run: az group create --name etp-rg-ghr-tsl --location "East US"    
