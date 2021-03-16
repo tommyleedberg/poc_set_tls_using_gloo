@@ -70,25 +70,25 @@
             "type": "string",
             "defaultValue": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg",
             "metadata": {
-                "description": "The username used to login to the github runner vm."
+                "description": "The username used to login to the Github runner vm."
             }
         },
         "githubRepoUrl": {
             "type": "string",
             "metadata": {
-                "description": "The repository to link the GitHub runner to."
+                "description": "The repository to link the Github runner to."
             }
         },
         "githubRepoToken": {
             "type": "string",
             "metadata": {
-                "description": "The token to set up the GitHub runner."
+                "description": "The token to set up the Github runner."
             }
         },
-        "githubRunnerConfigurationScript": {
+        "githubRunnerConfigurationScriptUri": {
             "type": "string",
             "metadata": {
-                "description": "The absolute path to the configuration script that will set up the Github Runner"
+                "description": "The location of the configuration script that will set up the Github Runner."
             }
         }
     },
@@ -233,7 +233,9 @@
                 "settings": {
                     "skipDos2Unix": false,
                     "timestamp": 123456789,
-                    "commandToExecute": "[concat('sh ', parameters('githubRunnerConfigurationScript'), ' ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]"
+                    "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]",
+                    "fileUris": [
+                        "[parameters('githubRunnerConfigurationScriptUri')]"
                 }
             }
         },
