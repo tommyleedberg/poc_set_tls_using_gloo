@@ -32,11 +32,8 @@ jobs:
       - name: Install Homebrew sliently
         run: sudo apt install linuxbrew-wrapper -y
         
-      - name: Switch to etpAdmin user
-        run: sudo -u ${{ github.event.inputs.userName }} -i
-        
       - name: Run brew for the first time to create the .linuxbrew directory
-        run:  brew -h
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew -h
         
       - name: Test that linuxbrew exists and update the shell path with it
         run: test -d /home/${{ github.event.inputs.userName }}/.linuxbrew && eval $(/home/${{ github.event.inputs.userName }}/.linuxbrew/bin/brew shellenv)
@@ -52,32 +49,29 @@ jobs:
       run:
         working-directory:  /home/etpAdmin/    
 
-    steps:   
-      - name: Switch to etpAdmin user
-        run: sudo -u ${{ github.event.inputs.userName }} -i
-        
+    steps:
       - name: Install Azure cli
-        run: brew install azure-cli
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install azure-cli
         continue-on-error: true
 
       - name: Install Node
-        run: brew install node
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install node
         continue-on-error: true
 
       - name: Install Helm
-        run: brew install helm
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install helm
         continue-on-error: true
 
       - name: Install KubeCtl
-        run: brew install kubectl
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install kubectl
         continue-on-error: true
 
       - name: Install GlooCtl
-        run: brew install glooctl
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install glooctl
         continue-on-error: true
 
       - name: Install Go
-        run: brew install go
+        run: sudo -u ${{ github.event.inputs.userName }} -i brew install go
         continue-on-error: true
         
   validateTools:
@@ -87,31 +81,28 @@ jobs:
       
       # This is a very basic way to validate. We should add some more logic here to validate tools are specific versions.
       steps:
-      - name: Switch to etpAdmin user
-        run: sudo -u ${{ github.event.inputs.userName }} -i
-        
       - name: Validate Azure cli is installed
-        run: az -v
+        run: sudo -u ${{ github.event.inputs.userName }} -i az -v
         continue-on-error: true
 
       - name: Validate Node is installed
-        run: node -v
+        run: sudo -u ${{ github.event.inputs.userName }} -i node -v
         continue-on-error: true
 
       - name: Validate Helm is installed
-        run: helm version
+        run: sudo -u ${{ github.event.inputs.userName }} -i helm version
         continue-on-error: true
 
         # instead of doing a version check with kubectl do a help check to validate it's installed.
         # at this point kubectl isnt connected to a cluster so kubectl version returns an exit code of 1 which fails this step
       - name: Validate KubeCtl is installed
-        run: kubectl --help
+        run: sudo -u ${{ github.event.inputs.userName }} -i kubectl --help
         continue-on-error: true
 
       - name: Validate GlooCtl is installed
-        run: glooctl version
+        run: sudo -u ${{ github.event.inputs.userName }} -i glooctl version
         continue-on-error: true
 
       - name: Validate Go is installed
-        run: go version
+        run: sudo -u ${{ github.event.inputs.userName }} -i go version
         continue-on-error: true
