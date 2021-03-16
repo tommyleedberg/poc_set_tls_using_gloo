@@ -2,10 +2,9 @@
    "prefix": "etp",
    "env": "tsl",
    "adminUsername": "etpAdmin",
-   "adminPassword": "etpGHRunnerVM!!",
-   "dmzVNetSubscriptionId": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
+   "subscriptionId": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
    "dmzVNetResourceGroupName": "etp-dp-dev-na-eastus-dmz",
    "dmzVNetResourceName": "dp-dev-na-eastus-dmz-vnet",
    "ghRunnerNSGResourceName": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg",
-   "githubRunnerConfigurationScriptRawUri": "https://raw.githubusercontent.com/ETP-Cloud/etp-infra/feature/61438-add-gh-runner-to-dmz/scripts/shared/dmz-gh-runner/configure-gh-runner.sh?token=ABPJ25H73FNOX2ETWITYPA3AKJRRO"
+   "githubRunnerConfigurationScriptRawUri": "https://raw.githubusercontent.com/ETP-Cloud/etp-infra/feature/61438-add-gh-runner-to-dmz/scripts/shared/dmz-gh-runner/configure-gh-runner.sh?token="
 }
