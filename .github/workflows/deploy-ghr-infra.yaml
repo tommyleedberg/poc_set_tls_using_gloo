@@ -8,10 +8,10 @@ on:
         description: 'Environment name where configuration is stored'     
         required: true 
       githubRepoUrl:
-        description: 'The repository to link the GitHub runner to.'
+        description: 'The repository to link the Github runner to.'
         required: true
       githubRepoToken:
-        description: 'The token to set up the GitHub runner.'
+        description: 'The token to set up the Github runner.'
         required: true
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       with:
           repository: ETP-Cloud/action-get-variables
           ref: create-action
-          token: ${{ secrets.ETP_GITHUB_TOKEN }} # GitHub User Token
+          token: ${{ secrets.ETP_GITHUB_TOKEN }}
           path: etp-get-vars
       
     - name: Get variables from config/${{ github.event.inputs.env }}/deploy-ghr-infra
@@ -46,16 +46,16 @@ jobs:
         parameters.prefix.value: ${{ steps.env-variables.outputs.prefix }}
         parameters.env.value: ${{ steps.env-variables.outputs.env }}
         parameters.adminUsername.value: ${{ steps.env-variables.outputs.adminUsername }}
-        parameters.adminPassword.value: ${{ steps.env-variables.outputs.adminPassword }}
-        parameters.dmzVNetSubscriptionId.value: ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}
+        parameters.adminPassword.value: ${{ secrets.GH_RUNNER_PASSWORD }}
+        parameters.dmzVNetSubscriptionId.value: ${{ steps.env-variables.outputs.subscriptionId }}
         parameters.dmzVNetResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
-        parameters.ghRunnerNSGSubscriptionId.value: ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}
+        parameters.ghRunnerNSGSubscriptionId.value: ${{ steps.env-variables.outputs.subscriptionId }}
         parameters.ghRunnerNSGResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
         parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
-        parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}
+        parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }} + ${{secrets.ETP_GITHUB_TOKEN}}
 
     - name: Azure Login
       uses: azure/login@v1
@@ -63,7 +63,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }} # Azure Service Principle
 
     - name: Set Azure Subscription
-      run: az account set --subscription ${{ steps.env-variables.outputs.dmzVNetSubscriptionId }}  
+      run: az account set --subscription ${{ steps.env-variables.outputs.subscriptionId }} 
 
     - name: Create Resource Group
       run: az group create --name etp-rg-ghr-tsl --location "East US"    
@@ -76,4 +76,4 @@ jobs:
         template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
         parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
         deploymentMode: Incremental
-        deploymentName: Create_GitHub_Runner_VM_Infra
+        deploymentName: Create_Github_Runner_VM_Infra
