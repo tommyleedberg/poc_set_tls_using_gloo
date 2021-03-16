@@ -61,7 +61,7 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Set Azure Subscription
       run: az account set --subscription "f2f53eaa-44eb-4a72-9270-130f0c9f1582"  
