@@ -3,7 +3,7 @@ name: Connect a GitHub runner to an AKS cluster
 on:
   workflow_dispatch:
     inputs:
-     userName:
+      userName:
         description: 'The username to create the tools under on the GitHub Runner vm'     
         default: 'etpAdmin'
         required: false
