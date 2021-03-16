@@ -85,10 +85,10 @@
                 "description": "The token to set up the GitHub runner."
             }
         },
-        "githubRunnerConfigurationScriptUri": {
+        "githubRunnerConfigurationScript": {
             "type": "string",
             "metadata": {
-                "description": "The location of the configuration script that will set up the GitHub Runner"
+                "description": "The absolute path to the configuration script that will set up the Github Runner"
             }
         }
     },
@@ -233,10 +233,7 @@
                 "settings": {
                     "skipDos2Unix": false,
                     "timestamp": 123456789,
-                    "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]",
-                    "fileUris": [
-                        "[parameters('githubRunnerConfigurationScriptUri')]"
-                    ]
+                    "commandToExecute": "[concat('sh ', parameters('githubRunnerConfigurationScript'), ' ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]"
                 }
             }
         },
