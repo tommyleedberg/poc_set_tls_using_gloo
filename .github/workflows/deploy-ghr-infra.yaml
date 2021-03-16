@@ -31,6 +31,10 @@ jobs:
           token: ${{ secrets.ETP_GITHUB_TOKEN }}
           path: etp-get-vars
       
+    - name: Get Github Runner Configuration script
+      id: get-config-script
+      run: echo '::set-output name=configurationScript::' cat /scripts/shared/configure-gh-runner.sh
+      
     - name: Get variables from config/${{ github.event.inputs.env }}/deploy-ghr-infra
       id: env-variables
       uses: ./etp-get-vars
@@ -55,7 +59,7 @@ jobs:
         parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
-        parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }} + ${{secrets.ETP_GITHUB_TOKEN}}
+        parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.get-config-script.outputs.configurationScript }}
 
     - name: Azure Login
       uses: azure/login@v1
