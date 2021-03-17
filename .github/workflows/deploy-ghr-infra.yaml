@@ -13,6 +13,10 @@ on:
       githubRepoToken:
         description: 'The token to set up the Github runner.'
         required: true
+      githubRunnerLabels:
+        description: 'A comma seperated list of labels to associate with the Github runner.'
+        default: 'dmz-runner'
+        required: false
 
 jobs:
   deploy:
@@ -55,7 +59,8 @@ jobs:
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}?token=${{ secrets.GH_RUNNER_CONFIG_SCRIPT_RAW_TOKEN }}
-
+        parameters.githubRunnerLabels.value: ${{ github.events.input.githubRunnerLabels }}
+        
     - name: Azure Login
       uses: azure/login@v1
       with:
