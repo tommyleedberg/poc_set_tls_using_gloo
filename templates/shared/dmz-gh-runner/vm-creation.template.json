@@ -99,7 +99,7 @@
             }
         },
         "rbacRoleAssignment": {
-            "type": "",
+            "type": "string",
             "defaultValue": "[newGuid()]",
             "metadata": {
                 "description": "A guid name for the Role Assignment resource."
