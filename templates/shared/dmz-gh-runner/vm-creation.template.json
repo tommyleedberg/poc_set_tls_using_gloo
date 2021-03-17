@@ -90,6 +90,13 @@
             "metadata": {
                 "description": "The location of the configuration script that will set up the Github Runner."
             }
+        },
+        "githubRunnerLabels": {
+            "type": "string",
+            "defaultValue": "dmz-runner",
+            "metadata": {
+                "description": "A comma seperated list of labels to associate with the DMZ runner"
+            }
         }
     },
     "variables": {
@@ -233,7 +240,7 @@
                 "settings": {
                     "skipDos2Unix": false,
                     "timestamp": 123456789,
-                    "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'))]",
+                    "commandToExecute": "[concat('sh configure-gh-runner.sh ', parameters('adminUsername'), ' ', parameters('githubRepoUrl'), ' ', parameters('githubRepoToken'), ' ', parameters('githubRunnerLabels'))]",
                     "fileUris": [
                         "[parameters('githubRunnerConfigurationScriptUri')]"
                     ]
