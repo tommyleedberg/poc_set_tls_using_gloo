@@ -109,7 +109,8 @@
 		"githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
 		"dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
 		"ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
-		"ghRunnerRBACRoleName": "Azure Kubernetes Service Cluster User Role"
+		"ghRunnerRBACRoleName": "Azure Kubernetes Service Cluster User Role",
+		"Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
@@ -253,8 +254,8 @@
 				"[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
 			],
 			"properties": {
-				"roleDefinitionId": "[variables('ghRunnerRBACRoleName')]",
-				"principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName')), variables('apiVersion_Vm'), 'Full').identity.principalId]"
+				"roleDefinitionId": "[variables('Contributor')]",
+				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]"
 			}
 		},
 		{
