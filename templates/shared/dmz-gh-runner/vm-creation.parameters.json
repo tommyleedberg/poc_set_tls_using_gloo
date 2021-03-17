@@ -40,6 +40,9 @@
         },
         "githubRunnerConfigurationScriptUri":{
             "value": ""
-        }
+        },
+        "githubRunnerLabels":{
+            "value: ""
+       }
     }
 }
