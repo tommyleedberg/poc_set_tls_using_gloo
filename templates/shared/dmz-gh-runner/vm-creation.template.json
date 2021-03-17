@@ -98,13 +98,6 @@
                 "description": "A comma seperated list of labels to associate with the DMZ runner"
             }
         },
-        "rbacRoleAssignment": {
-            "type": "string",
-            "defaultValue": "[newGuid()]",
-            "metadata": {
-                "description": "A guid name for the Role Assignment resource."
-            }
-        }
     },
     "variables": {
         "apiVersion_St": "2020-08-01-preview",
@@ -213,14 +206,14 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "[variables('apiVersion_Vm')]",
-            "name": "[parameters('rbacRoleAssignment')]",
+            "name": "RoleAssignment",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
             "properties": {
                 "roleDefinitionId": "[variables('ghRunnerRBACRoleName')]",
                 "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), variables('apiVersion_Vm'), 'Full').identity.principalId]",
-                "scope": "[resourceGroup(parameters('dmzVNetResourceGroupName')).id]"
+                "scope": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'))]"
             }         
         },
         {
