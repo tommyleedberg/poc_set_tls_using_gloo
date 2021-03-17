@@ -97,7 +97,14 @@
             "metadata": {
                 "description": "A comma seperated list of labels to associate with the DMZ runner"
             }
-        }
+        },
+        "rbacRoleAssignment": {
+            "type": "",
+            "defaultValue": "[newGuid()]",
+            "metadata": {
+                "description": "A guid name for the Role Assignment resource."
+            }
+        
     },
     "variables": {
         "apiVersion_St": "2020-08-01-preview",
@@ -109,8 +116,7 @@
         "githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
         "dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
         "ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
-        "ghRunnerRBACRoleName": "Azure Kubernetes Service Cluster User Role",
-        "rbacRoleAssignment": "[newGuid()]"
+        "ghRunnerRBACRoleName": "Azure Kubernetes Service Cluster User Role"     
     },
     "resources": [
         {
@@ -207,7 +213,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "[variables('apiVersion_Vm')]",
-            "name": "[variables('rbacRoleAssignment')]",
+            "name": "[parameters('rbacRoleAssignment')]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
