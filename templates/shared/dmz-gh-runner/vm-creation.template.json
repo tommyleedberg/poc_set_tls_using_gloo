@@ -254,8 +254,7 @@
 			],
 			"properties": {
 				"roleDefinitionId": "[variables('ghRunnerRBACRoleName')]",
-				"principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName')), variables('apiVersion_Vm'), 'Full').identity.principalId]",
-				"scope": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'))]"
+				"principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName')), variables('apiVersion_Vm'), 'Full').identity.principalId]"
 			}
 		},
 		{
