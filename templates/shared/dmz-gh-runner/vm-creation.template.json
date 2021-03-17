@@ -206,9 +206,8 @@
         },
         {
             "type": "Microsoft.Authorization/roleAssignments",
-           "apiVersion": "[variables('apiVersion_Vm')]",
-
-            "name": "[parameters('rbacGuid')]",
+            "apiVersion": "[variables('apiVersion_Vm')]",
+            "name": "[concat(variables('gitHubRunnerVMName'), '/rbacAssignment')]",
              "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
             ],
