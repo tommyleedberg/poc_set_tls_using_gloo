@@ -109,8 +109,8 @@
         "githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
         "dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
         "ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
-        "ghRunnerRBACRoleName": "Azure Kubernetes Service Cluster User Role"
-        
+        "ghRunnerRBACRoleName": "Azure Kubernetes Service Cluster User Role",
+        "rbacRoleAssignment": "[newGuid()]"
     },
     "resources": [
         {
@@ -207,13 +207,13 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "[variables('apiVersion_Vm')]",
-            "name": "[newGuid()]_rbacAssignment",
-             "dependsOn": [
+            "name": "[variables('rbacRoleAssignment')]",
+            "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
             ],
             "properties": {
                 "roleDefinitionId": "[variables('ghRunnerRBACRoleName')]",
-                "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2017-12-01', 'Full').identity.principalId]",
+                "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), variables('apiVersion_Vm'), 'Full').identity.principalId]",
                 "scope": "[resourceGroup(parameters('dmzVNetResourceGroupName')).id]"
             }         
         },
