@@ -203,19 +203,6 @@
 			}
 		},
 		{
-			"type": "Microsoft.Authorization/roleAssignments",
-			"apiVersion": "[variables('apiVersion_Vm')]",
-			"name": "RoleAssignment",
-			"dependsOn": [
-				"[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
-			],
-			"properties": {
-				"roleDefinitionId": "[variables('ghRunnerRBACRoleName')]",
-				"principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName')), variables('apiVersion_Vm'), 'Full').identity.principalId]",
-				"scope": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'))]"
-			}
-		},
-		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"apiVersion": "[variables('apiVersion_Vm')]",
 			"name": "[concat(variables('gitHubRunnerVMName'), '/enablevmaccess')]",
@@ -256,6 +243,19 @@
 						"[parameters('githubRunnerConfigurationScriptUri')]"
 					]
 				}
+			}
+		},
+	        {
+			"type": "Microsoft.Authorization/roleAssignments",
+			"apiVersion": "[variables('apiVersion_Vm')]",
+			"name": "RoleAssignment",
+			"dependsOn": [
+				"[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
+			],
+			"properties": {
+				"roleDefinitionId": "[variables('ghRunnerRBACRoleName')]",
+				"principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName')), variables('apiVersion_Vm'), 'Full').identity.principalId]",
+				"scope": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'))]"
 			}
 		},
 		{
