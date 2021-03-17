@@ -108,7 +108,9 @@
         "gitHubRunnerVMName": "[concat(parameters('prefix'), '-vm-ghr-', parameters('env'))]",
         "githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
         "dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
-        "ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]"
+        "ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
+        "ghRunnerRBACRoleName": "Azure Kubernetes Service Cluster User Role"
+        
     },
     "resources": [
         {
@@ -154,8 +156,6 @@
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('githubRunnerVMDiagStName'))]"
             ],
             "identity": {
-                "principalId": "",
-                "tenantId": "",
                 "type": "SystemAssigned"
             },
             "properties": {
@@ -203,6 +203,20 @@
                     }
                 }
             }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+           "apiVersion": "[variables('apiVersion_Vm')]",
+
+            "name": "[parameters('rbacGuid')]",
+             "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[variables('ghRunnerRBACRoleName')]",
+                "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2017-12-01', 'Full').identity.principalId]",
+                "scope": "[resourceGroup(parameters('dmzVNetResourceGroupName')).id]"
+            }         
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
