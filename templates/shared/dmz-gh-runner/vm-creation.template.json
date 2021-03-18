@@ -110,7 +110,7 @@
 		"githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
 		"dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
 		"ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
-      		"aksUserRole": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/providers/Microsoft.Authorization/roleDefinitions/', '4abbcc35-e782-43d8-92c5-2d3f1bd2253f')]",
+		"aksUserRole": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/providers/Microsoft.Authorization/roleDefinitions/', '4abbcc35-e782-43d8-92c5-2d3f1bd2253f')]"
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
@@ -205,14 +205,14 @@
 		},
 		{
 			"type": "Microsoft.ContainerService/managedClusters/providers/roleAssignments",
-			"apiVersion": "[variables('apiVersion_RoleAssignment')]",	
+			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
 			"dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"],
 			"name": "[variables('AllocationName_1')]",
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
 				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]"
 			}
-        	},
+		},
 		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"apiVersion": "[variables('apiVersion_Vm')]",
