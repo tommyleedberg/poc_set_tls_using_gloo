@@ -56,7 +56,7 @@ jobs:
       id: userCredentials
       with:
           keyvault: ${{ steps.env-variables.outputs.userCredentialsKeyVaultName }}
-          secrets: "apiGatewayRunnerUsername, apiGatwayRunnerPassword" 
+          secrets: "apiGatewayRunnerUsername, apiGatwayRunnerPassword"
 
     - name: Update ARM parameters file with values from config file
       uses: microsoft/variable-substitution@v1
@@ -67,7 +67,7 @@ jobs:
         parameters.prefix.value: ${{ steps.env-variables.outputs.prefix }}
         parameters.env.value: ${{ steps.env-variables.outputs.env }}
         parameters.adminUsername.value: ${{ steps.userCredentials.outputs.apiGatewayRunnerUsername }}
-        parameters.adminPassword.value: ${{ secrets.userCredentials.outputs.apiGatwayRunnerPassword }}
+        parameters.adminPassword.value: ${{ steps.userCredentials.outputs.apiGatwayRunnerPassword }}
         parameters.dmzVNetSubscriptionId.value: ${{ steps.env-variables.outputs.subscriptionId }}
         parameters.dmzVNetResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
