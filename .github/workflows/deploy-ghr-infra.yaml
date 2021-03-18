@@ -18,6 +18,9 @@ on:
         default: 'dmz-runner'
         required: false
 
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  
 jobs:
   deploy:
     name: Deploy GitHub Runner Infrastructure
