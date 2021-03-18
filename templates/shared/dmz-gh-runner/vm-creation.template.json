@@ -202,18 +202,7 @@
 					}
 				}
 			}
-		},
-		{
-			"type": "Microsoft.Authorization/roleAssignments",
-			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
-			"dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"],
-			"name": "AKSUser_RBAC_Assignment",
-			"properties": {
-				"roleDefinitionId": "[variables('aksUserRole')]",
-				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]"
-
-			}
-		},
+		},	
 		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"apiVersion": "[variables('apiVersion_Vm')]",
