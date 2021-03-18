@@ -39,7 +39,22 @@ jobs:
       uses: ./etp-get-vars
       with: 
           variable-set: 'config/${{ github.event.inputs.env }}/deploy-ghr-infra'
-          
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }} # Azure Service Principle
+
+    - name: Set Azure Subscription
+      run: az account set --subscription ${{ steps.env-variables.outputs.subscriptionId }} 
+
+    - name: Get VM Username and Password from KeyVault      
+      uses: Azure/get-keyvault-secrets@v1.0
+      id: userCredentials
+      with:
+          keyvault: ${{ steps.env-variables.outputs.userCredentialsKeyVaultName }}
+          secrets: "apiGatwayRunnerPassword,apiGatewayRunnerUsername" 
+
     - name: Update ARM parameters file with values from config file
       uses: microsoft/variable-substitution@v1
       id: parameters-file-replacement
@@ -48,8 +63,8 @@ jobs:
       env:
         parameters.prefix.value: ${{ steps.env-variables.outputs.prefix }}
         parameters.env.value: ${{ steps.env-variables.outputs.env }}
-        parameters.adminUsername.value: ${{ steps.env-variables.outputs.adminUsername }}
-        parameters.adminPassword.value: ${{ secrets.GH_RUNNER_PASSWORD }}
+        parameters.adminUsername.value: ${{ steps.userCredentials.outputs.apiGatewayRunnerUsername }}
+        parameters.adminPassword.value: ${{ secrets.userCredentials.outputs.apiGatwayRunnerPassword }}
         parameters.dmzVNetSubscriptionId.value: ${{ steps.env-variables.outputs.subscriptionId }}
         parameters.dmzVNetResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
@@ -61,14 +76,6 @@ jobs:
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}?token=${{ secrets.GH_RUNNER_CONFIG_SCRIPT_RAW_TOKEN }}
         parameters.githubRunnerLabels.value: ${{ github.events.input.githubRunnerLabels }}
         
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }} # Azure Service Principle
-
-    - name: Set Azure Subscription
-      run: az account set --subscription ${{ steps.env-variables.outputs.subscriptionId }} 
-
     - name: Create Resource Group
       run: az group create --name etp-rg-ghr-tsl --location "East US"    
 
