@@ -1,6 +1,7 @@
 {
    "prefix": "etp",
    "env": "tsl",
+   "userCredentialsKeyVaultName": "dp-dev-deployment",
    "subscriptionId": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
    "dmzVNetResourceGroupName": "etp-dp-dev-na-eastus-dmz",
    "dmzVNetResourceName": "dp-dev-na-eastus-dmz-vnet",
