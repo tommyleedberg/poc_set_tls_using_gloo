@@ -20,6 +20,20 @@ jobs:
      - name: Update and Upgrade
        run: sudo apt update -y && sudo apt upgrade -y
 
+  setRBACPermissions:
+    name: Set RBAC Permissions to grant VM AKS access
+    runs-on: [dmz-runner]
+    
+    steps:
+      - name: Azure Login
+        uses: az login --identity
+
+      - name: Set Azure Subscription
+        run: az account set --subscription f2f53eaa-44eb-4a72-9270-130f0c9f1582
+        
+      - name: Set RBAC permissions
+        run: az vm identity assign -g etp-rg-ghr-tsl -n etp-vm-ghr-tsl --role '/subscriptions/f2f53eaa-44eb-4a72-9270-130f0c9f1582/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f' --scope '/subscriptions/f2f53eaa-44eb-4a72-9270-130f0c9f1582'
+      
   installHomebrew:
     name: Install Homebrew
     runs-on: [dmz-runner]
