@@ -91,3 +91,6 @@ jobs:
         parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
         deploymentMode: Incremental
         deploymentName: Create_Github_Runner_VM_Infra
+        
+    - name: Set RBAC permissions
+      run: az vm identity assign -g etp-rg-ghr-tsl -n ${{ steps.env-variables.outputs.prefix }}-vm-ghr-${{ steps.env-variables.outputs.env }} --role '/subscriptions/'${{ steps.env-variables.outputs.subscriptionId }}'/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f' --scope /subscriptions/${{ steps.env-variables.outputs.subscriptionId }}
