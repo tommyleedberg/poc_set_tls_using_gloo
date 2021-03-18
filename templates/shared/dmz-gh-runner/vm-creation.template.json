@@ -204,7 +204,7 @@
 			}
 		},
 		{
-			"type": "Microsoft.ContainerService/managedClusters/providers/roleAssignments",
+			"type": "Microsoft.Authorization/roleAssignments",
 			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
 			"dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"],
 			"name": "AKSUser_RBAC_Assignment",
