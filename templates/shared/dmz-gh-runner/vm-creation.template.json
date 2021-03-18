@@ -207,7 +207,7 @@
 			"type": "Microsoft.ContainerService/managedClusters/providers/roleAssignments",
 			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
 			"dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"],
-			"name": "[variables('AllocationName_1')]",
+			"name": "AKSUser_RBAC_Assignment",
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
 				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]"
