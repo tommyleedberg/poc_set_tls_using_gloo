@@ -194,10 +194,10 @@
 			"type": "Microsoft.Authorization/roleAssignments",
 			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
 			"name": "[parameters('aksUserRBACAssignmentGuid')]",
+			"scope": "[variables('aksUserRuleScope')]"
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
-				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]",
-				"scope": "[variables('aksUserRuleScope')]"
+				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]"			
 			}
 		},
 		{
