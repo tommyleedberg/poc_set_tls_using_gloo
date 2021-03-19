@@ -84,7 +84,7 @@ jobs:
     
       with:
         scope: subscription     
-        subscriptionId: ${{ steps.env-variables.outputs.subscriptionId }} 
+        region: eastus
         template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
         parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
         deploymentMode: Incremental
