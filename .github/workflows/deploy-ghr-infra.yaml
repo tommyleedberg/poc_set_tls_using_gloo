@@ -68,11 +68,8 @@ jobs:
         parameters.env.value: ${{ steps.env-variables.outputs.env }}
         parameters.adminUsername.value: ${{ steps.userCredentials.outputs.apiGatewayRunnerUsername }}
         parameters.adminPassword.value: ${{ steps.userCredentials.outputs.apiGatwayRunnerPassword }}
-        parameters.dmzVNetSubscriptionId.value: ${{ steps.env-variables.outputs.subscriptionId }}
-        parameters.dmzVNetResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
+        parameters.dmzResourceGroupName.value: ${{ steps.env-variables.outputs.dmzResourceGroupName }}
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
-        parameters.ghRunnerNSGSubscriptionId.value: ${{ steps.env-variables.outputs.subscriptionId }}
-        parameters.ghRunnerNSGResourceGroupName.value: ${{ steps.env-variables.outputs.dmzVNetResourceGroupName }}
         parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
