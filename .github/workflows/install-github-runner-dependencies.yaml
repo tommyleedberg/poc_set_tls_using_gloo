@@ -22,7 +22,7 @@ jobs:
 
   installHomebrew:
     name: Install Homebrew
-    runs-on: [dmz-runner]
+    runs-on: [tsl-test-runner]
     needs: [updateSystem] 
     defaults:
       run:
