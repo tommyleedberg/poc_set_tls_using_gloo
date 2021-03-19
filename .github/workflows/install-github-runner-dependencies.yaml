@@ -91,19 +91,3 @@ jobs:
 
       - name: Validate Go is installed
         run: sudo -u ${{ github.event.inputs.userName }} -i go version
-
-  setRBACPermissions:
-    name: Set RBAC Permissions to grant VM AKS access
-    runs-on: [dmz-runner]
-    needs: [validateTools]
-          
-    steps:
-      - name: Azure Login
-        run:  sudo -u ${{ github.event.inputs.userName }} -i az login --identity
-
-      - name: Set Azure Subscription
-        run:  sudo -u ${{ github.event.inputs.userName }} -i az account set --subscription f2f53eaa-44eb-4a72-9270-130f0c9f1582
-        
-      - name: Set RBAC permissions
-        run:  sudo -u ${{ github.event.inputs.userName }} -i az vm identity assign -g etp-rg-ghr-tsl -n etp-vm-ghr-tsl --role '/subscriptions/f2f53eaa-44eb-4a72-9270-130f0c9f1582/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f' --scope '/subscriptions/f2f53eaa-44eb-4a72-9270-130f0c9f1582'
-      
