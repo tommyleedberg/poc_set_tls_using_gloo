@@ -14,20 +14,11 @@
         "adminPassword": {
             "value": ""
         },
-        "dmzVNetSubscriptionId": {
-            "value": ""
-        },
-        "dmzVNetResourceGroupName": {
+        "dmzResourceGroupName": {
             "value": "etp-dp-dev-na-eastus-dmz"
         },
         "dmzVNetResourceName": {
             "value": "dp-dev-na-eastus-dmz-vnet"
-        },
-        "ghRunnerNSGSubscriptionId": {
-            "value": ""
-        },
-        "ghRunnerNSGResourceGroupName": {
-            "value": "etp-dp-dev-na-eastus-dmz"
         },
         "ghRunnerNSGResourceName": {
             "value": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg"
