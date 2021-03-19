@@ -110,7 +110,7 @@
 		"githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
 		"dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
 		"ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
-		"aksUserRole": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/providers/Microsoft.Authorization/roleDefinitions/', '4abbcc35-e782-43d8-92c5-2d3f1bd2253f')]"
+		"aksUserRole": "4abbcc35-e782-43d8-92c5-2d3f1bd2253f"
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
