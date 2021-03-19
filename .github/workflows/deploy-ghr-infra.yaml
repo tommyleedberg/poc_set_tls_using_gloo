@@ -74,7 +74,7 @@ jobs:
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}?token=${{ secrets.GH_RUNNER_CONFIG_SCRIPT_RAW_TOKEN }}
-        parameters.githubRunnerLabels.value: ${{ github.events.input.githubRunnerLabels }}
+        parameters.githubRunnerLabels.value: ${{ github.events.inputs.githubRunnerLabels }}
         
     - name: Create Resource Group
       run: az group create --name etp-rg-ghr-tsl --location "East US"    
@@ -89,7 +89,7 @@ jobs:
         deploymentMode: Incremental
         deploymentName: Create_Github_Runner_VM_Infra
         
-    - name: Set RBAC permissions
+    - name: Set RBAC permissions to give VM AKS User credentials on the subscription
       run: az vm identity assign -g etp-rg-ghr-tsl -n etp-vm-ghr-tsl --role '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f' --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'
       
 
