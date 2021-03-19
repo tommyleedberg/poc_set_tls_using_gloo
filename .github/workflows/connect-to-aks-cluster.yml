@@ -17,7 +17,9 @@ on:
       clusterName:
         description: 'The name of the AKS cluster.'
         required: true
-        
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  
 jobs:   
   deploy:
     name: Connect Runner to AKS  Cluster
