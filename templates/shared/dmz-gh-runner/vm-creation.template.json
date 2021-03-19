@@ -99,7 +99,7 @@
 		"aksUserRole": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4abbcc35-e782-43d8-92c5-2d3f1bd2253f')]",
 		"subscriptionId": "[concat('/subscriptions/', subscription().subscriptionId)]",
 		"aksUserRolePrincipleId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]",
-		"aksUserRBACAssignmentGUID": "[guid(parameters('aksUserRolePrincipleId'), parameters('aksUserRole'), resourceGroup().id)
+		"aksUserRBACAssignmentGUID": "[guid(parameters('aksUserRolePrincipleId'), parameters('aksUserRole'), resourceGroup().id)]"
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
@@ -218,7 +218,7 @@
 				"publisher": "Microsoft.OSTCExtensions",
 				"type": "VMAccessForLinux",
 				"typeHandlerVersion": "1.4",
-				"settings": {},  
+				"settings": {},
 				"protectedSettings": {
 					"username": "[parameters('adminUsername')]",
 					"password": "[parameters('adminPassword')]"
