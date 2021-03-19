@@ -155,8 +155,6 @@
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('githubRunnerVMDiagStName'))]"
 			],
 			"identity": {
-				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]",
-				"tenantId": "db8e2ba9-95c1-4fbb-b558-6bf8bb1d2981",
 				"type": "SystemAssigned"
 			},
 			"properties": {
@@ -213,7 +211,6 @@
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
 				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]"
-
 			}
 		},
 		{
