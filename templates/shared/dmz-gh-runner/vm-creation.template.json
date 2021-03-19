@@ -193,7 +193,6 @@
 		{
 			"type": "Microsoft.Authorization/roleAssignments",
 			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
-			"dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"],
 			"name": "[parameters('aksUserRBACAssignmentGuid')]",
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
@@ -214,7 +213,7 @@
 				"publisher": "Microsoft.OSTCExtensions",
 				"type": "VMAccessForLinux",
 				"typeHandlerVersion": "1.4",
-				"settings": {},
+				"settings": {},  
 				"protectedSettings": {
 					"username": "[parameters('adminUsername')]",
 					"password": "[parameters('adminPassword')]"
