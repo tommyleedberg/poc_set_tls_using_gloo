@@ -74,7 +74,7 @@ jobs:
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}?token=${{ secrets.GH_RUNNER_CONFIG_SCRIPT_RAW_TOKEN }}
-        parameters.githubRunnerLabels.value: ${{ github.events.inputs.githubRunnerLabels }}
+        parameters.githubRunnerLabels.value: ${{ github.event.inputs.githubRunnerLabels }}
         
     - name: Create Resource Group
       run: az group create --name etp-rg-ghr-tsl --location "East US"    
