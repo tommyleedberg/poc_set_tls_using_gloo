@@ -198,7 +198,7 @@
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
 				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]",
-				"scope": "[variables('aksUserRuleScope')]]"
+				"scope": "[variables('aksUserRuleScope')]"
 			}
 		},
 		{
