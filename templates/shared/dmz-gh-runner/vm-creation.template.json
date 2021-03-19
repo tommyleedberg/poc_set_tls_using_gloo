@@ -97,7 +97,9 @@
 		"dmzVnetId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
 		"ghRunnerNSGId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
 		"aksUserRole": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4abbcc35-e782-43d8-92c5-2d3f1bd2253f')]",
-		"subscriptionId": "[subscription().subscriptionId]"
+		"subscriptionId": "[concat('/subscriptions/', subscription().subscriptionId)]",
+		"aksUserRolePrincipleId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]",
+		"aksUserRBACAssignmentGUID": "[guid(parameters('aksUserRolePrincipleId'), parameters('aksUserRole'), resourceGroup().id)
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
@@ -193,10 +195,13 @@
 		{
 			"type": "Microsoft.Authorization/roleAssignments",
 			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
-			"name": "[parameters('aksUserRBACAssignmentGuid')]",
+			"name": "[variables('aksUserRBACAssignmentGuid')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"
+			],
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
-				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]",
+				"principalId": "[variables('aksUserRolePrincipleId')]",
 				"scope": "[variables('subscriptionId')]"
 			}
 		},
