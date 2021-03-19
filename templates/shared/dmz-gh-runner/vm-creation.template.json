@@ -102,11 +102,18 @@
 			"kind": "StorageV2",
 			"properties": {
 				"networkAcls": {
-					"bypass": "Logging, Metrics, AzureServices",
-					"virtualNetworkRules": [],
-					"ipRules": [],
-					"defaultAction": "Allow"
-				},
+                    "resourceAccessRules": [],
+                    "bypass": "Logging, Metrics, AzureServices",
+                    "virtualNetworkRules": [
+                        {
+			    "id": "[concat(variables('dmzVnetId'), '/subnets/githubrunner-subnet')]",
+                            "action": "Allow",
+                            "state": "Succeeded"
+                        }
+                    ],
+                    "ipRules": [],
+                    "defaultAction": "Deny"
+                },
 				"supportsHttpsTrafficOnly": true,
 				"encryption": {
 					"services": {
@@ -233,7 +240,6 @@
 				"ipConfigurations": [{
 					"name": "ipconfig1",
 					"properties": {
-						"privateIPAddress": "10.238.248.196",
 						"privateIPAllocationMethod": "Dynamic",
 						"subnet": {
 							"id": "[concat(variables('dmzVnetId'), '/subnets/githubrunner-subnet')]"
