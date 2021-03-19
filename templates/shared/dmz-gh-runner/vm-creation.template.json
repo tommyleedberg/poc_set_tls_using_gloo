@@ -76,13 +76,6 @@
 			"metadata": {
 				"description": "A comma seperated list of labels to associate with the DMZ runner."
 			}
-		},
-		"aksUserRBACAssignmentGuid": {
-			"type": "string",
-			"defaultValue": "[newGuid()]",
-			"metadata": {
-				"description": "A new GUID used to identify the AKS User Access role assignment."
-			}
 		}
 	},
 	"variables": {
@@ -95,9 +88,7 @@
 		"gitHubRunnerVMName": "[concat(parameters('prefix'), '-vm-ghr-', parameters('env'))]",
 		"githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
 		"dmzVnetId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
-		"ghRunnerNSGId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
-		"aksUserRole": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4abbcc35-e782-43d8-92c5-2d3f1bd2253f')]",
-		"subscriptionId": "[concat('/subscriptions/', subscription().subscriptionId)]"
+		"ghRunnerNSGId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]"
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
@@ -188,19 +179,6 @@
 						"enabled": true
 					}
 				}
-			}
-		},
-		{
-			"type": "Microsoft.Authorization/roleAssignments",
-			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
-			"name": "[parameters('aksUserRBACAssignmentGuid')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"
-			],
-			"properties": {
-				"roleDefinitionId": "[variables('aksUserRole')]",
-				"principalId": "[[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]]",
-				"scope": "[variables('subscriptionId')]"
 			}
 		},
 		{
