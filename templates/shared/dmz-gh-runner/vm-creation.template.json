@@ -31,46 +31,25 @@
 				"description": "The password used to login to the github runner vm."
 			}
 		},
-		"dmzVNetSubscriptionId": {
-			"type": "string",
-			"defaultValue": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
-			"metadata": {
-				"description": "The username used to login to the github runner vm."
-			}
-		},
-		"dmzVNetResourceGroupName": {
+		"dmzResourceGroupName": {
 			"type": "string",
 			"defaultValue": "etp-dp-dev-na-eastus-dmz",
 			"metadata": {
-				"description": "The username used to login to the github runner vm."
+				"description": "The DMZ resource Group Name."
 			}
 		},
 		"dmzVNetResourceName": {
 			"type": "string",
 			"defaultValue": "dp-dev-na-eastus-dmz-vnet",
 			"metadata": {
-				"description": "The username used to login to the github runner vm."
-			}
-		},
-		"ghRunnerNSGSubscriptionId": {
-			"type": "string",
-			"defaultValue": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
-			"metadata": {
-				"description": "The username used to login to the github runner vm."
-			}
-		},
-		"ghRunnerNSGResourceGroupName": {
-			"type": "string",
-			"defaultValue": "etp-dp-dev-na-eastus-dmz",
-			"metadata": {
-				"description": "The username used to login to the github runner vm."
+				"description": "The name of the Virtual Network that contains the subnet associated with this runner vm."
 			}
 		},
 		"ghRunnerNSGResourceName": {
 			"type": "string",
 			"defaultValue": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg",
 			"metadata": {
-				"description": "The username used to login to the Github runner vm."
+				"description": "The name of the Network Security Group associated with this runner vm."
 			}
 		},
 		"githubRepoUrl": {
@@ -95,7 +74,14 @@
 			"type": "string",
 			"defaultValue": "dmz-runner",
 			"metadata": {
-				"description": "A comma seperated list of labels to associate with the DMZ runner"
+				"description": "A comma seperated list of labels to associate with the DMZ runner."
+			}
+		},
+		"aksUserRBACAssignmentGuid": {
+			"type": "string",
+			"defaultValue": "[newGuid()]",
+			"metadata": {
+				"description": "A new GUID used to identify the AKS User Access role assignment."
 			}
 		}
 	},
@@ -108,10 +94,10 @@
 		"githubRunnerNICName": "[concat(parameters('prefix'), '-nic-ghr-', parameters('env'))]",
 		"gitHubRunnerVMName": "[concat(parameters('prefix'), '-vm-ghr-', parameters('env'))]",
 		"githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
-		"dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzVNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
-		"ghRunnerNSGId": "[concat('/subscriptions/', parameters('ghRunnerNSGSubscriptionId'), '/resourceGroups/', parameters('ghRunnerNSGResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
+		"dmzVnetId": "[concat('/subscriptions/', parameters('dmzVNetSubscriptionId'), '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
+		"ghRunnerNSGId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
 		"aksUserRole": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4abbcc35-e782-43d8-92c5-2d3f1bd2253f')]",
-        "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]"
+		"aksUserRBACAssignmentGuid": "[concat(variables('tenant_aks_name'),'/Microsoft.Authorization/',parameters('aksUserRBACAssignmentGuid'))]"
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
@@ -208,7 +194,7 @@
 			"type": "Microsoft.Authorization/roleAssignments",
 			"apiVersion": "[variables('apiVersion_RoleAssignment')]",
 			"dependsOn": ["[resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName'))]"],
-			"name": "AKSUser_RBAC_Assignment",
+			"name": "[variables('aksUserRBACAssignmentGuid')]",
 			"properties": {
 				"roleDefinitionId": "[variables('aksUserRole')]",
 				"principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('gitHubRunnerVMName')), '2019-07-01', 'full').Identity.principalId]"
