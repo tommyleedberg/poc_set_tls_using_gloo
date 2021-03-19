@@ -15,13 +15,13 @@
             "value": ""
         },
         "dmzResourceGroupName": {
-            "value": "etp-dp-dev-na-eastus-dmz"
+            "value": ""
         },
         "dmzVNetResourceName": {
-            "value": "dp-dev-na-eastus-dmz-vnet"
+            "value": ""
         },
         "ghRunnerNSGResourceName": {
-            "value": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg"
+            "value": ""
         },
         "githubRepoUrl": {
             "value": ""
