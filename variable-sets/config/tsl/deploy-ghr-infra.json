@@ -6,5 +6,6 @@
    "dmzResourceGroupName": "etp-dp-dev-na-eastus-dmz",
    "dmzVNetResourceName": "dp-dev-na-eastus-dmz-vnet",
    "ghRunnerNSGResourceName": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg",
+   "logAnaylyticsWorkspaceName": "dp-dev-na-eastus-monitoring-z23h3uh6qsmdm",
    "githubRunnerConfigurationScriptRawUri": "https://raw.githubusercontent.com/ETP-Cloud/etp-infra/feature/61438-add-gh-runner-to-dmz/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
 }
