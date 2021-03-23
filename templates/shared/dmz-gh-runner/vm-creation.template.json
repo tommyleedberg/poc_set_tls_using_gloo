@@ -2,22 +2,22 @@
 	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"prefix": {
+		"owner": {
 			"type": "string",
 			"defaultValue": "etp",
 			"metadata": {
-				"description": "Prefix added to azure resources names to be globally unique (lowercase only)."
+				"description": "Owner added to azure resources names to be globally unique (lowercase only). Examples: etp or dpt."
 			},
-			"minLength": 1,
-			"maxLength": 6
+			"minLength": 2,
+			"maxLength": 3
 		},
 		"env": {
 			"type": "string",
 			"metadata": {
-				"description": "Target environment (dev, int...) Suffix added to azure resources names to be globally unique (lowercase only)."
+				"description": "Target environment suffix added to azure resources names to be globally unique (lowercase only). Examples: dev, pre, prd"
 			},
-			"minLength": 1,
-			"maxLength": 7
+			"minLength": 3,
+			"maxLength": 3
 		},
 		"adminUsername": {
 			"type": "string",
@@ -77,10 +77,16 @@
 				"description": "A comma seperated list of labels to associate with the DMZ runner."
 			}
 		},
-		"monitoringWorkspaceResourceId": {
+		"monitoringWorkspaceResourceName": {
             "type": "string",
             "metadata": {
-                "description": "Resource Id of the log analytics workspace used to monitor the VM."
+                "description": "Resource name of the log analytics workspace used to monitor the VM."
+            }
+        },
+        "monitoringWorkspaceResourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group name of the log analytics workspace used to monitor the VM."
             }
         }
 	},
@@ -90,17 +96,20 @@
 		"apiVersion_NIC": "2020-05-01",
 		"apiVersion_RoleAssignment": "2020-04-01-preview",
 		"apiVersion_DeploymentScript": "2015-01-01",
-		"githubRunnerNICName": "[concat(parameters('prefix'), '-nic-ghr-', parameters('env'))]",
-		"gitHubRunnerVMName": "[concat(parameters('prefix'), '-vm-ghr-', parameters('env'))]",
-		"githubRunnerVMDiagStName": "[concat(parameters('prefix'), 'diagstghr', parameters('env'))]",
+		"regionCode": "use",
+		"githubRunnerNICName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-nic-', variables('regionCode'))]",
+		"gitHubRunnerVMName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-vm-', variables('regionCode'))]",
+		"githubRunnerVMDiagStName": "[concat(parameters('owner'), parameters('env'), 'ghr', 'diagst')]", 
+		"ghrOSDiskName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-osdisk-', variables('regionCode'))]",
 		"dmzVnetId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
 		"ghRunnerNSGId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
+        "monitoringWorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('monitoringWorkspaceResourceGroupName'), '/providers/Microsoft.Operationalinsights/Workspaces', parameters('monitoringWorkspaceResourceName'))]",
 		"storageAccountSasTokenRequestContent": {
             "signedServices": "bt",
             "signedResourceTypes": "co",
             "signedPermission": "acluw",
             "signedExpiry": "9001-01-31T05:00:00Z"
-        }
+        }-
 	},
 	"resources": [{
 			"type": "Microsoft.Storage/storageAccounts",
@@ -168,7 +177,7 @@
 					},
 					"osDisk": {
 						"osType": "Linux",
-						"name": "[concat(variables('gitHubRunnerVMName'), '_OsDisk1')]",
+						"name": "[variables('ghrOSDiskName')]",
 						"createOption": "FromImage",
 						"caching": "ReadWrite",
 						"managedDisk": {
@@ -247,7 +256,7 @@
 		{
             "type": "Microsoft.Compute/virtualMachines/extensions",
 			"apiVersion": "[variables('apiVersion_Vm')]",
-            "name": "[concat(variables('gitHubRunnerVMName', '/diagnostics')]",
+            "name": "[concat(variables('gitHubRunnerVMName'), '/diagnostics')]",
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
 				"[concat('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
@@ -271,7 +280,7 @@
                                         "scheduledTransferPeriod": "PT1H"
                                     }
                                 ],
-                                "resourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName')]"
+                                "resourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/', 'Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]"
                             },
                             "syslogEvents": {
                                 "syslogEventConfiguration": {
@@ -1016,21 +1025,21 @@
 		{
             "type": "Microsoft.Compute/virtualMachines/extensions",
 			"apiVersion": "2018-06-01",
-            "name": "[concat(variables('gitHubRunnerVMName','/OMSExtension')]",    
-            "location": "[parameters('regionID')]",
+            "name": "[concat(variables('gitHubRunnerVMName'),'/OMSExtension')]",    
+			"location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName')]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('gitHubRunnerVMName', 'diagnostics')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/', variables('gitHubRunnerVMName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('gitHubRunnerVMName'), 'diagnostics')]"
             ],
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                 "type": "OmsAgentForLinux",
                 "typeHandlerVersion": "1.13",
                 "settings": {
-                    "workspaceId": "[reference(parameters('monitoringWorkspaceResourceId'), '2020-08-01').customerId]"
+                    "workspaceId": "[reference(variables('monitoringWorkspaceResourceId'), '2020-08-01').customerId]"
                 },
                 "protectedSettings": {
-                    "workspaceKey": "[listKeys(parameters('monitoringWorkspaceResourceId'), '2020-08-01').primarySharedKey]"
+                    "workspaceKey": "[listKeys(variables('monitoringWorkspaceResourceId'), '2020-08-01').primarySharedKey]"
                 }
             }
         },
@@ -1045,7 +1054,7 @@
 					"properties": {
 						"privateIPAllocationMethod": "Dynamic",
 						"subnet": {
-							"id": "[concat(variables('dmzVnetId'), '/subnets/githubrunner-subnet')]"
+							"id": "[concat(variables('dmzVnetId'), '/subnets/etp-ghr-snet')]"
 						},
 						"primary": true,
 						"privateIPAddressVersion": "IPv4"
