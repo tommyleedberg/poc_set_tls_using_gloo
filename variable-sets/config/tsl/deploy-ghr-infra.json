@@ -6,6 +6,7 @@
    "dmzResourceGroupName": "etp-dp-dev-na-eastus-dmz",
    "dmzVNetResourceName": "dp-dev-na-eastus-dmz-vnet",
    "ghRunnerNSGResourceName": "dp-dev-na-eastus-ghrunner-vm-subnet-nsg",
-   "logAnaylyticsResourceId": "/subscriptions/f2f53eaa-44eb-4a72-9270-130f0c9f1582/resourcegroups/etp-dp-dev-na-eastus-shared-services/providers/microsoft.operationalinsights/workspaces/dp-dev-na-eastus-monitoring-z23h3uh6qsmdm",
+   "monitoringWorkspaceResourceName": "dp-dev-na-eastus-monitoring-z23h3uh6qsmdm",
+   "monitoringWorkspaceResourceGroupName": "etp-dp-dev-na-eastus-shared-services",
    "githubRunnerConfigurationScriptRawUri": "https://raw.githubusercontent.com/ETP-Cloud/etp-infra/feature/61438-add-gh-runner-to-dmz/scripts/shared/dmz-gh-runner/configure-gh-runner.sh"
 }
