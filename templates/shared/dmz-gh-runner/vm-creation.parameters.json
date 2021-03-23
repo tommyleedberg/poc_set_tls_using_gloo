@@ -25,18 +25,21 @@
         },
         "githubRepoUrl": {
             "value": ""
-         },
+        },
         "githubRepoToken": {
             "value": ""
         },
-        "githubRunnerConfigurationScriptUri":{
+        "githubRunnerConfigurationScriptUri": {
             "value": ""
         },
-        "githubRunnerLabels":{
+        "githubRunnerLabels": {
             "value": ""
-       },
-       "monitoringWorkspaceResourceId": {
-        "value": ""
+        },
+        "monitoringWorkspaceResourceName": {
+            "value": ""
+        },
+        "monitoringWorkspaceResourceGroupName": {
+            "value": ""
         }
     }
 }
