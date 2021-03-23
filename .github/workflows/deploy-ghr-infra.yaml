@@ -4,9 +4,17 @@ name: Deploy Github Runner VM Infrastructure
 on:
   workflow_dispatch:
     inputs:
+      owner:
+        description: 'Environment name where configuration is stored'     
+        default: 'etp' 
+        required: false
       env:
         description: 'Environment name where configuration is stored'     
-        required: true 
+        required: true    
+      regionCode:
+        description: 'The ETP region code.'
+        default: 'use'
+        required: false 
       githubRepoUrl:
         description: 'The repository to link the Github runner to.'
         required: true
@@ -15,7 +23,7 @@ on:
         required: true
       githubRunnerLabels:
         description: 'A comma seperated list of labels to associate with the Github runner.'
-        default: 'dmz-runner'
+        default: 'dev,apigateway-ghr'
         required: false
 
 env:
@@ -71,14 +79,13 @@ jobs:
         parameters.dmzResourceGroupName.value: ${{ steps.env-variables.outputs.dmzResourceGroupName }}
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
         parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
-        parameters.logAnalyticsResourceId.value: ${{ steps.env-variables.outputs.logAnaylyticsResourceId }}
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}?token=${{ secrets.GH_RUNNER_CONFIG_SCRIPT_RAW_TOKEN }}
         parameters.githubRunnerLabels.value: ${{ github.event.inputs.githubRunnerLabels }}
         
     - name: Create Resource Group
-      run: az group create --name etp-rg-ghr-tsl --location "East US"    
+      run: az group create --name ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-rg-${{ github.event.inputs.regionCode }} --location "East US"    
 
     - name: Deploy Arm Template
       uses: azure/arm-deploy@v1
@@ -91,6 +98,4 @@ jobs:
         deploymentName: Create_Github_Runner_VM_Infra
         
     - name: Set RBAC permissions to give VM AKS User credentials on the subscription
-      run: az vm identity assign -g etp-rg-ghr-tsl -n etp-vm-ghr-tsl --role '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f' --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'
-      
-
+      run: az vm identity assign -g etp-rg-ghr-tsl -n etp-vm-ghr-tsl --role '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f' --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'   
