@@ -1,6 +1,6 @@
 {
    "owner": "etp",
-   "env": "dev",
+   "env": "tsl",
    "regionCode": "use",
    "subscriptionId": "f2f53eaa-44eb-4a72-9270-130f0c9f1582",
    "userCredentialsKeyVaultName": "dp-dev-deployment",
