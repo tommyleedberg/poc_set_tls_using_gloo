@@ -84,7 +84,7 @@ jobs:
         parameters.githubRunnerLabels.value: ${{ github.event.inputs.githubRunnerLabels }}
         
     - name: Create Resource Group
-      run: az group create --name ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-rg-${{ github.event.inputs.regionCode }} --location "East US"    
+      run: az group create --name ${{ steps.env-variables.outputs.owner }}-${{ steps.env-variables.outputs.env }}-ghr-rg-${{ steps.env-variables.outputs.regionCode }} --location "East US"    
 
     - name: Deploy Arm Template
       uses: azure/arm-deploy@v1
