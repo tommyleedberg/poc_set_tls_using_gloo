@@ -91,7 +91,7 @@ jobs:
       uses: azure/arm-deploy@v1
     
       with:
-        resourceGroupName: etp-rg-ghr-tsl
+        resourceGroupName: ${{ steps.env-variables.outputs.owner }}-${{ steps.env-variables.outputs.env }}-ghr-rg-${{ steps.env-variables.outputs.regionCode }}
         template: "templates/shared/dmz-gh-runner/vm-creation.template.json"
         parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
         deploymentMode: Incremental
