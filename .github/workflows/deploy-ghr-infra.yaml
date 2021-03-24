@@ -4,17 +4,9 @@ name: Deploy Github Runner VM Infrastructure
 on:
   workflow_dispatch:
     inputs:
-      owner:
-        description: 'Environment name where configuration is stored'     
-        default: 'etp' 
-        required: false
       env:
         description: 'Environment name where configuration is stored'     
         required: true    
-      regionCode:
-        description: 'The ETP region code.'
-        default: 'use'
-        required: false 
       githubRepoUrl:
         description: 'The repository to link the Github runner to.'
         required: true
@@ -33,7 +25,9 @@ jobs:
   deploy:
     name: Deploy GitHub Runner Infrastructure
     runs-on: [ubuntu-latest]
-    
+    env:
+      AKS_USER_ROLE: '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f'
+
     steps:       
     - name: Checkout Etp Infra Repo
       uses: actions/checkout@v2  
@@ -73,8 +67,9 @@ jobs:
       with:
         files: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
       env:
-        parameters.prefix.value: ${{ steps.env-variables.outputs.prefix }}
+        parameters.owner.value: ${{ steps.env-variables.outputs.owner }}
         parameters.env.value: ${{ steps.env-variables.outputs.env }}
+        parameters.regionCode.value: ${{ steps.env-variables.regionCode.env }}
         parameters.adminUsername.value: ${{ steps.userCredentials.outputs.apiGatewayRunnerUsername }}
         parameters.adminPassword.value: ${{ steps.userCredentials.outputs.apiGatwayRunnerPassword }}
         parameters.dmzResourceGroupName.value: ${{ steps.env-variables.outputs.dmzResourceGroupName }}
@@ -99,4 +94,4 @@ jobs:
         deploymentName: Create_Github_Runner_VM_Infra
         
     - name: Set RBAC permissions to give VM AKS User credentials on the subscription
-      run: az vm identity assign -g etp-rg-ghr-tsl -n etp-vm-ghr-tsl --role '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f' --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'   
+      run: az vm identity assign -g ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-rg-${{ github.event.inputs.regionCode }} -n ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-vm-${{ github.event.inputs.regionCode }} --role env.AKS_USER_ROLE --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'   
