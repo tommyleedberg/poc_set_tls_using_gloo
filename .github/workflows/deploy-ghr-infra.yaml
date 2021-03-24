@@ -25,9 +25,7 @@ jobs:
   deploy:
     name: Deploy GitHub Runner Infrastructure
     runs-on: [ubuntu-latest]
-    env:
-      AKS_USER_ROLE: '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f'
-
+    
     steps:       
     - name: Checkout Etp Infra Repo
       uses: actions/checkout@v2  
@@ -45,6 +43,11 @@ jobs:
       with: 
           variable-path: 'config/${{ github.event.inputs.env }}'
           variable-set: 'deploy-ghr-infra'
+
+    - name: Define RBAC rules
+      id: rbac-rules
+      run:   
+        echo "::set-output name=AKS_USER_ROLE::/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}/providers/Microsoft.Authorization/roleDefinitions/4abbcc35-e782-43d8-92c5-2d3f1bd2253f"
 
     - name: Azure Login
       uses: azure/login@v1
@@ -92,6 +95,6 @@ jobs:
         parameters: "templates/shared/dmz-gh-runner/vm-creation.parameters.json"
         deploymentMode: Incremental
         deploymentName: Create_Github_Runner_VM_Infra
-        
+     
     - name: Set RBAC permissions to give VM AKS User credentials on the subscription
-      run: az vm identity assign -g ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-rg-${{ github.event.inputs.regionCode }} -n ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-vm-${{ github.event.inputs.regionCode }} --role env.AKS_USER_ROLE --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'   
+      run: az vm identity assign -g ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-rg-${{ github.event.inputs.regionCode }} -n ${{ github.event.inputs.owner }}-${{ github.event.inputs.env }}-ghr-vm-${{ github.event.inputs.regionCode }} --role ${{ steps.rbac-rules.outputs.env.AKS_USER_ROLE }} --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'   
