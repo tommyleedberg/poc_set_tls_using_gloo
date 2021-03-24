@@ -99,4 +99,4 @@ jobs:
         deploymentName: Create_Github_Runner_VM_Infra
      
     - name: Set RBAC permissions to give VM AKS User credentials on the subscription
-      run: az vm identity assign -g ${{ steps.env-variables.outputs.owner }}-${{ steps.env-variables.outputs.env }}-ghr-rg-${{ steps.env-variables.outputs.regionCode }} -n ${{ steps.env-variables.outputs.owner }}-${{ steps.env-variables.outputs.env }}-ghr-vm-${{ steps.env-variables.outputs.regionCode }} --role ${{ steps.rbac-rules.outputs.env.AKS_USER_ROLE }} --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'   
+      run: az vm identity assign -g ${{ steps.env-variables.outputs.owner }}-${{ steps.env-variables.outputs.env }}-ghr-rg-${{ steps.env-variables.outputs.regionCode }} -n ${{ steps.env-variables.outputs.owner }}-${{ steps.env-variables.outputs.env }}-ghr-vm-${{ steps.env-variables.outputs.regionCode }} --role ${{ steps.rbac-rules.outputs.AKS_USER_ROLE }} --scope '/subscriptions/${{ steps.env-variables.outputs.subscriptionId }}'   
