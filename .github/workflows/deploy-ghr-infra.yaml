@@ -14,7 +14,7 @@ on:
         description: 'The token to set up the Github runner.'
         required: true
       githubRunnerLabels:
-        description: 'A comma seperated list of labels to associate with the Github runner.'
+        description: 'A comma seperated list of labels to associate with the Github runner. Note: Spaces are not allowed.'
         default: 'dev,apigateway-ghr'
         required: false
 
@@ -79,6 +79,7 @@ jobs:
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
         parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
         parameters.monitoringWorkspaceResourceGroupName.value: ${{ steps.env-variables.outputs.monitoringWorkspaceResourceGroupName }}
+        parameters.monitoringWorkspaceResourceName.value: ${{ steps.env-variables.outputs.monitoringWorkspaceResourceName }}
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}?token=${{ secrets.GH_RUNNER_CONFIG_SCRIPT_RAW_TOKEN }}
