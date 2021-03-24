@@ -23,7 +23,7 @@ env:
 jobs:   
   deploy:
     name: Connect Runner to AKS  Cluster
-    runs-on: [dmz-runner]
+    runs-on: [dev,apigateway-ghr]
     
     steps: 
      - name: Azure Login
