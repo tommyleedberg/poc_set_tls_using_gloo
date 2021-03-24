@@ -72,9 +72,9 @@ jobs:
       env:
         parameters.owner.value: ${{ steps.env-variables.outputs.owner }}
         parameters.env.value: ${{ steps.env-variables.outputs.env }}
-        parameters.regionCode.value: ${{ steps.env-variables.regionCode.env }}
-        parameters.adminUsername.value: ${{ steps.userCredentials.outputs.apiGatewayRunnerUsername }}
-        parameters.adminPassword.value: ${{ steps.userCredentials.outputs.apiGatwayRunnerPassword }}
+        parameters.regionCode.value: ${{ steps.env-variables.outputs.regionCode }}
+        parameters.adminUsername.value: ${{ steps.userCredentials.outputs.apiGatewayGithubRunnerUsername }}
+        parameters.adminPassword.value: ${{ steps.userCredentials.outputs.apiGatewayGithubRunnerPassword }}
         parameters.dmzResourceGroupName.value: ${{ steps.env-variables.outputs.dmzResourceGroupName }}
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
         parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
