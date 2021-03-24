@@ -62,7 +62,7 @@ jobs:
       id: userCredentials
       with:
           keyvault: ${{ steps.env-variables.outputs.userCredentialsKeyVaultName }}
-          secrets: "apiGatewayRunnerUsername, apiGatwayRunnerPassword"
+          secrets: "apiGatewayGithubRunnerUsername, apiGatewayGithubRunnerPassword"
 
     - name: Update ARM parameters file with values from config file
       uses: microsoft/variable-substitution@v1
