@@ -19,6 +19,14 @@
 			"minLength": 3,
 			"maxLength": 3
 		},
+        "regionCode": 
+        {
+            "type": "string",
+			"defaultValue": "use",
+			"metadata": {
+				"description": "The region code for the resources. Defaults to use"
+			}
+        },
 		"adminUsername": {
 			"type": "string",
 			"metadata": {
@@ -94,13 +102,10 @@
 		"apiVersion_St": "2020-08-01-preview",
 		"apiVersion_Vm": "2020-06-01",
 		"apiVersion_NIC": "2020-05-01",
-		"apiVersion_RoleAssignment": "2020-04-01-preview",
-		"apiVersion_DeploymentScript": "2015-01-01",
-		"regionCode": "use",
-		"githubRunnerNICName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-nic-', variables('regionCode'))]",
-		"gitHubRunnerVMName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-vm-', variables('regionCode'))]",
+		"githubRunnerNICName": "[concat(parameters('owner'), '-', parameters('env'), '-ghrsubnet-nic-', parameters('regionCode'))]",
+		"gitHubRunnerVMName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-vm-', parameters('regionCode'))]",
 		"githubRunnerVMDiagStName": "[concat(parameters('owner'), parameters('env'), 'ghr', 'diagst')]", 
-		"ghrOSDiskName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-osdisk-', variables('regionCode'))]",
+		"ghrOSDiskName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-osdisk-', parameters('regionCode'))]",
 		"dmzVnetId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
 		"ghRunnerNSGId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
         "monitoringWorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('monitoringWorkspaceResourceGroupName'), '/providers/Microsoft.Operationalinsights/Workspaces', parameters('monitoringWorkspaceResourceName'))]",
