@@ -78,6 +78,7 @@ jobs:
         parameters.dmzResourceGroupName.value: ${{ steps.env-variables.outputs.dmzResourceGroupName }}
         parameters.dmzVNetResourceName.value: ${{ steps.env-variables.outputs.dmzVNetResourceName }}
         parameters.ghRunnerNSGResourceName.value: ${{ steps.env-variables.outputs.ghRunnerNSGResourceName }}
+        parameters.monitoringWorkspaceResourceGroupName.value: ${{ steps.env-variables.outputs.monitoringWorkspaceResourceGroupName }}
         parameters.githubRepoUrl.value: ${{ github.event.inputs.githubRepoUrl }}
         parameters.githubRepoToken.value: ${{ github.event.inputs.githubRepoToken }}
         parameters.githubRunnerConfigurationScriptUri.value: ${{ steps.env-variables.outputs.githubRunnerConfigurationScriptRawUri }}?token=${{ secrets.GH_RUNNER_CONFIG_SCRIPT_RAW_TOKEN }}
