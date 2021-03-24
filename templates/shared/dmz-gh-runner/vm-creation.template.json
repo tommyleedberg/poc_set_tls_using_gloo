@@ -107,7 +107,7 @@
 		"ghrOSDiskName": "[concat(parameters('owner'), '-', parameters('env'), '-ghr-osdisk-', parameters('regionCode'))]",
 		"dmzVnetId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('dmzVNetResourceName'))]",
 		"ghRunnerNSGId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('dmzResourceGroupName'), '/providers/Microsoft.Network/networkSecurityGroups/', parameters('ghRunnerNSGResourceName'))]",
-		"monitoringWorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('monitoringWorkspaceResourceGroupName'), '/providers/Microsoft.OperationalInsights/Workspaces', parameters('monitoringWorkspaceResourceName'))]",
+		"monitoringWorkspaceResourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('monitoringWorkspaceResourceGroupName'), '/providers/Microsoft.OperationalInsights/Workspaces/', parameters('monitoringWorkspaceResourceName'))]",
 		"storageAccountSasTokenRequestContent": {
 			"signedServices": "bt",
 			"signedResourceTypes": "co",
